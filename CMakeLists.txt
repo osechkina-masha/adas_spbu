@@ -38,7 +38,8 @@ else()
     trackers/KCFTracker.h
     trackers/CSRTTracker.cpp
     trackers/CSRTTracker.h
-  )
+    WindowState.h
+
 endif()
 
 find_package( OpenCV REQUIRED )
