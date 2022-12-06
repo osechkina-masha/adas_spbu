@@ -5,7 +5,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <iostream>
-#include "MyTracker.h"
+#include "trackers/MyTracker.h"
 
 using namespace cv;
 using namespace std;

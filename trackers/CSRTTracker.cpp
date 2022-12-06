@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "CSRTTracker.h"
 #include <opencv2/photo.hpp>
@@ -17,7 +16,7 @@ void CSRTTracker::startTracking(const std::string &path, cv::Rect2d pedestrian, 
 
 CSRTTracker::CSRTTracker() = default;
 
-const cv::Rect2d CSRTTracker::getNextPedestrianPosition() {
+cv::Rect2d CSRTTracker::getNextPedestrianPosition() {
     cv::Mat frame;
     capture >> frame;
     cv::fastNlMeansDenoising(frame, frame, 30, 7, 21);

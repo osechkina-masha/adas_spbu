@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "MyTracker.h"
+#include "trackers/MyTracker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
