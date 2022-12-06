@@ -45,6 +45,35 @@ else ()
             trackers/GOTURNTracker.h
             UI/WindowState.h UI/BoundingBoxWidget.cpp UI/BoundingBoxWidget.h)
 endif ()
+if (ANDROID)
+    add_library(Tracking SHARED
+            main.cpp
+            UI/mainwindow.cpp
+            UI/mainwindow.h
+            UI/mainwindow.ui
+            )
+else ()
+    add_executable(Tracking
+            main.cpp
+            UI/mainwindow.cpp
+            UI/mainwindow.h
+            UI/mainwindow.ui
+            trackers/MyTracker.cpp
+            trackers/MyTracker.h
+            trackers/Tracker.cpp
+            trackers/Tracker.h
+            trackers/OpticalFlowTracker.cpp
+            trackers/OpticalFlowTracker.h
+            trackers/KCFTracker.cpp
+            trackers/KCFTracker.h
+            trackers/CSRTTracker.cpp
+            trackers/CSRTTracker.h
+            trackers/TLDTracker.cpp
+            trackers/TLDTracker.h
+            trackers/GOTURNTracker.cpp
+            trackers/GOTURNTracker.h
+            UI/WindowState.h UI/BoundingBoxWidget.cpp UI/BoundingBoxWidget.h trackers/consts.h)
+endif ()
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
