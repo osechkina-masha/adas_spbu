@@ -2,10 +2,33 @@ cmake_minimum_required(VERSION 3.23)
 project(VisibilityEstimator)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(${PROJECT_NAME} src/contourDetector.cpp src/contoursMerger.cpp src/distanceEstimator.cpp src/imageFilter.cpp src/main.cpp src/contourDrawer.cpp src/contoursOrdering.cpp src/edgeDetector.cpp src/inversePerspectingMapping.cpp src/contourDetector.h src/contoursMerger.h src/distanceEstimator.h src/imageFilter.h src/contourDrawer.h src/contoursOrdering.h src/edgeDetector.h src/inversePerspectiveMapping.h)
+add_executable(VisibilityEstimator
+        src/main.cpp
+        src/contourDetector.cpp
+        src/contourDetector.h
+        src/contourDrawer.cpp
+        src/contourDrawer.h
+        src/contourMerger.cpp
+        src/contourMerger.h
+        src/contourOrdering.cpp
+        src/contourOrdering.h
+        src/distanceEstimator.cpp
+        src/distanceEstimator.h
+        src/edgeDetector.cpp
+        src/edgeDetector.h
+        src/imageFilter.cpp
+        src/imageFilter.h
+        src/inversePerspectiveMapping.cpp
+        src/inversePerspectiveMapping.h)
 
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
+set(OpenCV_LIBS
+        opencv_highgui
+        opencv_imgproc
+        opencv_imgcodecs)
+
+target_link_libraries(VisibilityEstimator ${OpenCV_LIBS})

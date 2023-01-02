@@ -9,28 +9,35 @@
 #include <string>
 #include <vector>
 
-namespace distanceEstimator
+namespace distance_estimator
 {
-    class inversePerspectiveMapping
+    /**
+     * @brief Class that provides a set of methods for inverse perspective mapping.
+    */
+    class InversePerspectiveMapping
     {
     public:
-        inversePerspectiveMapping(int sizeX, int sizeY, int focalLength, double cameraHeight) :
-                sizeX(sizeX), sizeY(sizeY), focalLength(focalLength), cameraHeight(cameraHeight)
+        InversePerspectiveMapping(
+            int sizeX,
+            int sizeY,
+            int focalLength,
+            float cameraHeight) :
+            sizeX(sizeX), sizeY(sizeY), focalLength(focalLength), cameraHeight(cameraHeight)
         {
         }
 
-        cv::Mat inversePerspectiveMap(cv::Mat frame, cv::Point vanishingPoint, cv::Point farthestVisiblePoint);
+        cv::Mat inversePerspectiveMap(const cv::Mat& frame, cv::Point vanishingPoint, cv::Point farthestVisiblePoint);
 
     private:
         int sizeX;
         int sizeY;
 
-        double cameraHeight;
+        float cameraHeight;
         int focalLength;
 
-        cv::Mat getProjectiveTransformationMatrix(cv::Size size, float pitch);
+        [[nodiscard]] cv::Mat getProjectiveTransfromationMatrix(cv::Size size, float pitch) const;
 
-        cv::Mat getMatrixWithoutSecondColumn(cv::Mat matrix);
+        static cv::Mat getMatrixWithoutSecondColumn(cv::Mat matrix);
     };
 }
 

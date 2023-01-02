@@ -1,9 +1,10 @@
-#include "contourDrawer.h"
 #include "opencv2/imgproc.hpp"
 
-namespace EdgeDetector
+#include "contourDrawer.h"
+
+namespace edge_detector
 {
-    void contourDrawer::colorContours(cv::Mat frame, std::vector<std::vector<cv::Point>> contours)
+    void ContourDrawer::colorContours(cv::Mat frame, const std::vector<std::vector<cv::Point>>& contours)
     {
         for (int idx = 0; idx < contours.size(); idx++)
         {
@@ -12,7 +13,7 @@ namespace EdgeDetector
         }
     }
 
-    void contourDrawer::drawHorizontalLine(cv::Mat frame, cv::Point point)
+    void ContourDrawer::drawHorizontalLine(cv::Mat frame, cv::Point point)
     {
         cv::Point p1(0, point.y);
         cv::Point p2(frame.cols, point.y);

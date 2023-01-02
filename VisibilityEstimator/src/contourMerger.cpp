@@ -1,18 +1,19 @@
-#include "contoursMerger.h"
-
 #include "opencv2/imgcodecs.hpp"
-#include "opencv2/highgui.hpp"
-#include "contoursOrdering.h"
 
 #include <filesystem>
 #include <algorithm>
-#include <map>
 #include <set>
+#include <utility>
 
-namespace EdgeDetector
+#include "contourOrdering.h"
+#include "contourMerger.h"
+
+namespace edge_detector
 {
-    std::vector<std::vector<cv::Point>> contoursMerger::connectContours(std::vector<std::vector<cv::Point>> contours,
-        int imageSizeX, int imageSizeY)
+    std::vector<std::vector<cv::Point>> ContourMerger::connectContours(
+        std::vector<std::vector<cv::Point>> contours,
+        int imageSizeX,
+        int imageSizeY)
     {
         // Making matrix where points are -1 if they don't belong to any contour, and they can be positive,
         // if they belong to any contour; and positive value is the index of the contour they belong to.
@@ -26,7 +27,7 @@ namespace EdgeDetector
         }
 
         // Sorting by values the dictionary where key is contour index, value is contour size.
-        auto sortedContoursIndices = contoursOrdering::sortContoursByTheirSizesDescending(contours);
+        auto sortedContoursIndices = ContourOrdering::sortContoursByTheirSizesDescending(contours);
 
         // подумать, чем ограничить количество итераций
         // Merging contours.
@@ -36,11 +37,17 @@ namespace EdgeDetector
             newContours = mergeContours(newContours, indexMatrix, sortedContoursIndices[i], contours[sortedContoursIndices[i]]);
         }
 
+        indexMatrix.clear();
+        sortedContoursIndices.clear();
+
         return removeZeroSizeContours(newContours);
     }
 
-    std::set<int> contoursMerger::findNearestContours(std::vector<std::vector<cv::Point>> contours, int mainContourIndex,
-        std::vector<std::vector<int>> contoursIndexesMatrix, cv::Point point)
+    std::set<int> ContourMerger::findNearestContours(
+        std::vector<std::vector<cv::Point>> contours,
+        int mainContourIndex,
+        std::vector<std::vector<int>> contourIndexMatrix,
+        cv::Point point)
     {
         std::set<int> foundContours;
         const int neighborhoodSize = 5;
@@ -50,12 +57,12 @@ namespace EdgeDetector
             for (int yDiff = -neighborhoodSize; yDiff <= neighborhoodSize; yDiff++)
             {
                 if (point.x + xDiff <= 0 || point.y + yDiff <= 0
-                    || point.x + xDiff >= contoursIndexesMatrix.size() || point.y + yDiff >= contoursIndexesMatrix[0].size())
+                    || point.x + xDiff >= contourIndexMatrix.size() || point.y + yDiff >= contourIndexMatrix[0].size())
                 {
                     continue;
                 }
-                auto contourIndex = contoursIndexesMatrix[point.x + xDiff][point.y + yDiff];
-                if (contourIndex != -1 && contours[contourIndex].size() != 0 && contourIndex != mainContourIndex)
+                auto contourIndex = contourIndexMatrix[point.x + xDiff][point.y + yDiff];
+                if (contourIndex != -1 && !contours[contourIndex].empty() && contourIndex != mainContourIndex)
                 {
                     foundContours.insert(contourIndex);
                 }
@@ -65,22 +72,18 @@ namespace EdgeDetector
         return foundContours;
     }
 
-    /// <summary>
-    /// Returns vector where some contours have been merged.
-    /// </summary>
-    /// <param name="contours"></param>
-    /// <param name="mainContourIndex"></param>
-    /// <param name="nearestContours"></param>
-    /// <returns></returns>
-    std::vector<std::vector<cv::Point>> contoursMerger::mergeContours(std::vector<std::vector<cv::Point>> contours,
-        std::vector<std::vector<int>> indexMatrix,
-        int mainContourIndex, std::vector<cv::Point> mainContour)
+    // Returns vector where some contours have been merged.
+    std::vector<std::vector<cv::Point>> ContourMerger::mergeContours(
+        std::vector<std::vector<cv::Point>> contours,
+        const std::vector<std::vector<int>>& indexMatrix,
+        int mainContourIndex,
+        std::vector<cv::Point> mainContour)
     {
-        auto pointWithMaxY = contoursOrdering::findPointWithMaxY(mainContour);
+        auto pointWithMaxY = ContourOrdering::findPointWithMaxY(std::move(mainContour));
 
         auto nearestContours = findNearestContours(contours, mainContourIndex, indexMatrix, pointWithMaxY);
 
-        if (nearestContours.size() == 0)
+        if (nearestContours.empty())
         {
             return contours;
         }
@@ -88,14 +91,14 @@ namespace EdgeDetector
         std::vector<cv::Point> zeroSizeVector;
         std::vector<std::vector<cv::Point>> mergedContours;
         mergedContours.reserve(contours.size() - nearestContours.size());
-        for (int i = 0; i < contours.size(); i++)
+        for (auto i = 0; i < std::ssize(contours); i++)
         {
             if (i == mainContourIndex)
             {
-                int sizeOfMergedContour = contours[mainContourIndex].size();
+                auto sizeOfMergedContour = std::ssize(contours[mainContourIndex]);
                 for (auto contourIndex : nearestContours)
                 {
-                    sizeOfMergedContour += contours[contourIndex].size();
+                    sizeOfMergedContour += std::ssize(contours[contourIndex]);
                 }
 
                 std::vector<cv::Point> newContour;
@@ -123,12 +126,12 @@ namespace EdgeDetector
         return mergeContours(mergedContours, indexMatrix, mainContourIndex, mergedContours[mainContourIndex]);
     }
 
-    std::vector<std::vector<cv::Point>> contoursMerger::removeZeroSizeContours(std::vector<std::vector<cv::Point>> contours)
+    std::vector<std::vector<cv::Point>> ContourMerger::removeZeroSizeContours(std::vector<std::vector<cv::Point>> contours)
     {
-        std::vector<std::vector<cv::Point>>::iterator iter = contours.begin();
+        auto iter = contours.begin();
         while (iter != contours.end())
         {
-            if (iter->size() == 0)
+            if (iter->empty())
             {
                 iter->clear();
                 iter = contours.erase(iter);

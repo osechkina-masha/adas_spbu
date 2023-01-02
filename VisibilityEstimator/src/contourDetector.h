@@ -4,12 +4,20 @@
 
 #include "opencv2/opencv.hpp"
 
-namespace EdgeDetector
+namespace edge_detector
 {
-    class contourDetector
+    /**
+     * @brief Class that provides a method for detecting contours on the image.
+    */
+    class ContourDetector
     {
     public:
-        static std::vector<std::vector<cv::Point>> detectContours(cv::Mat image);
+        /**
+         * @brief Detects contours using Canny, Suzuki algorithm. And them applies to them algorithm for merging.
+         * @param image is the image on which contours should be detected.
+         * @return Vector of detected contours.
+        */
+        static std::vector<std::vector<cv::Point>> detectContours(const cv::Mat& image);
     };
 }
 
