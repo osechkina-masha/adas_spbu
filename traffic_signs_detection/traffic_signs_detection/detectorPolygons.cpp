@@ -12,4 +12,4 @@ std::vector<cv::Vec3f> detectorPolygons::detectCircle(cv::Mat frame)
         grayImage.rows / 16,  
         100, 30, 10, 40); 
     return circles;
- }
+}
