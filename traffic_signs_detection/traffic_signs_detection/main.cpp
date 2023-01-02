@@ -1,5 +1,4 @@
 ﻿#include "imageSegmentation.h"
-#include "main.h"
 #include "detectorPolygons.h"
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>

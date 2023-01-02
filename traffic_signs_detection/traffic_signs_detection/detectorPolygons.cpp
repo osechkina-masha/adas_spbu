@@ -2,7 +2,7 @@
 #include "detectorPolygons.h"
 
 
-std::vector<cv::Vec3f> detectorPolygons::detectCircle(cv::Mat frame)
+std::vector<cv::Vec3f> detectorPolygons::detectCircle(const cv::Mat &frame)
 {
     cv::Mat grayImage;
     cvtColor(frame, grayImage, cv::COLOR_BGR2GRAY);
