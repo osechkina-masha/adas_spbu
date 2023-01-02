@@ -11,5 +11,5 @@ class detectorPolygons
 public:
     
     // Detects circles in an image
-    static std::vector<cv::Vec3f> detectCircle(cv::Mat frame);
+    static std::vector<cv::Vec3f> detectCircle(const cv::Mat &frame);
 };

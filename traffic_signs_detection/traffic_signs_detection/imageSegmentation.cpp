@@ -1,7 +1,7 @@
 ﻿#include "imageSegmentation.h"
 #include <iostream>
 
-cv::Mat imageSegmentation::highlightRed(cv::Mat originalImage)
+cv::Mat imageSegmentation::highlightRed(const cv::Mat &originalImage)
 {
 	cv::Mat imageHSV;
 	cv::Mat redImage;
@@ -25,7 +25,7 @@ cv::Mat imageSegmentation::highlightRed(cv::Mat originalImage)
 	return final;
 }
 
-cv::Mat imageSegmentation::highlightYellow(cv::Mat originalImage)
+cv::Mat imageSegmentation::highlightYellow(const cv::Mat &originalImage)
 {   
 	cv::Mat yellowImage;
 	cv::Mat imageHSV;
@@ -45,7 +45,7 @@ cv::Mat imageSegmentation::highlightYellow(cv::Mat originalImage)
 	return newImage;
 }
 
-cv::Mat imageSegmentation::highlightBlue(cv::Mat originalImage)
+cv::Mat imageSegmentation::highlightBlue(const cv::Mat &originalImage)
 {   
 	cv::Mat blueImage;
 	cv::Mat imageHSV;
@@ -65,7 +65,7 @@ cv::Mat imageSegmentation::highlightBlue(cv::Mat originalImage)
 	return newImage;
 }
 
-cv::Mat imageSegmentation::highlightWhite(cv::Mat originalImage)
+cv::Mat imageSegmentation::highlightWhite(const cv::Mat &originalImage)
 {
 	cv::Mat whiteImage;
 	cv::Mat imageHSV;
