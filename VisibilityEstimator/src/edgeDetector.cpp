@@ -8,7 +8,7 @@
 
 namespace edge_detector
 {
-    cv::Point EdgeDetector::findFarthestVisiblePoint(std::vector<std::vector<cv::Point>> contours, cv::Point vanishingPoint)
+    cv::Point EdgeDetector::findFarthestVisiblePoint(const std::vector<std::vector<cv::Point>>& contours, cv::Point vanishingPoint)
     {
         std::vector<int> sortedContoursIndices = ContourOrdering::sortContoursByTheirSizesDescending(contours);
         auto numberOfConsideredContours = std::ssize(contours) >= 10 ? 10 : std::ssize(contours);

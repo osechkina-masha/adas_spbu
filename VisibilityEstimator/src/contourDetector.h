@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CONTOURDETECTOR_H
-#define CONTOURDETECTOR_H
 
 #include "opencv2/opencv.hpp"
 
@@ -20,5 +18,3 @@ namespace edge_detector
         static std::vector<std::vector<cv::Point>> detectContours(const cv::Mat& image);
     };
 }
-
-#endif

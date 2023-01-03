@@ -1,6 +1,4 @@
 #pragma once
-#ifndef IMAGEFILTER_H
-#define IMAGEFILTER_H
 
 #include "opencv2/imgproc.hpp"
 
@@ -20,14 +18,12 @@ namespace edge_detector
 
         /**
          * @brief Makes an image with a minimum value between multiple frames for each pixel.
-         * @param is the deque of images to which algorithm should be applied.
+         * @param images is the deque of images to which algorithm should be applied.
          * @return Image with a minimum value between multiple frames for each pixel.
         */
-        static cv::Mat selectMinimumForEachPixel(std::deque<cv::Mat> images);
+        static cv::Mat selectMinimumForEachPixel(const std::deque<cv::Mat>& images);
 
     private:
         static int getMinimumPixel(std::deque<cv::Mat> images, int row, int col);
     };
 }
-
-#endif

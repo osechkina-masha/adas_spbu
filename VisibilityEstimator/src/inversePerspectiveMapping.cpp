@@ -16,8 +16,6 @@ namespace distance_estimator
         cv::warpPerspective(croppedImage, warpedImage, projectiveTransformationMatrix,
             cv::Size(warpedImage.cols, warpedImage.rows));
 
-        //cv::resize(warpedImage, warpedImage, cv::Size(frame.cols, frame.rows + 300));
-
         return warpedImage;
     }
 
@@ -34,43 +32,8 @@ namespace distance_estimator
             0, 0, 1);
 
         cv::Mat matrix = instrinsicMatrix * transformationMatrix;
-        //for (int i = 0; i < 3; i++) {
-        //    for (int j = 0; j < 3; j++) {
-        //        auto g = matrix.at<float>(i, j);
-        //    }
-        //}
 
-        //return getMatrixWithoutSecondColumn(matrix);
         return matrix;
-        //cv::Mat rotationMatrix = (cv::Mat_<float>(3, 3) <<
-        //    1, 0, 0,
-        //    0, -sin(pitch), -cos(pitch),
-        //    0, cos(pitch), -sin(pitch));
-
-        //cv::Mat translationMatrix = (cv::Mat_<float>(3, 1) <<
-        //    3.5f / 2.0f,
-        //    0,
-        //    1);
-
-        //cv::Mat cameraMatrix = (cv::Mat_<float>(3, 3) <<
-        //    focalLength, 0, size.width / 2,
-        //    0, focalLength, size.height / 2,
-        //    0, 0, 1);
-
-        //cv::Mat transformationMatrix3D = (cv::Mat_<float>(3, 3) <<
-        //    1, 0, -3.5f / 2.0f,
-        //    0, -sin(pitch), cos(pitch) * cameraHeight,
-        //    0, cos(pitch), sin(pitch) * cameraHeight);
-
-        //cv::Mat scaleMatrix = (cv::Mat_<float>(3, 3) << )
-        //cv::vconcat(rotationMatrix, translationMatrix, transformationMatrix3D);
-
-        //cv::Mat translationMatrix = (cv::Mat_<float>(3, 3) <<
-        //    0, 0, 0,
-        //    0, 0, 0,
-        //    0, 0, -cameraHeight / sin(pitch));
-
-        //return cameraMatrix * transformationMatrix3D;
     }
 
     cv::Mat InversePerspectiveMapping::getMatrixWithoutSecondColumn(cv::Mat matrix)

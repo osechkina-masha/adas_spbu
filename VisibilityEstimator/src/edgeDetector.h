@@ -1,6 +1,4 @@
 #pragma once
-#ifndef EDGEDETECTOR_H
-#define EDGEDETECTOR_H
 
 #include "opencv2/imgproc.hpp"
 
@@ -21,7 +19,7 @@ namespace edge_detector
          * @param vanishingPoint is the vanishing point of the road borders.
          * @return Farthest visible point of the road on the image.
         */
-        static cv::Point findFarthestVisiblePoint(std::vector<std::vector<cv::Point>> contours, cv::Point vanishingPoint);
+        static cv::Point findFarthestVisiblePoint(const std::vector<std::vector<cv::Point>>& contours, cv::Point vanishingPoint);
 
     private:
         static double countContourCos(cv::Point vanishingPoint, cv::Point contourPoint);
@@ -29,5 +27,3 @@ namespace edge_detector
         static double findCoefficient(cv::Point vanishingPoint, cv::Point contour);
     };
 }
-
-#endif

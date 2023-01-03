@@ -15,7 +15,7 @@ namespace edge_detector
         return resultImage;
     }
 
-    cv::Mat ImageFilter::selectMinimumForEachPixel(std::deque<cv::Mat> images)
+    cv::Mat ImageFilter::selectMinimumForEachPixel(const std::deque<cv::Mat>& images)
     {
         cv::Mat resultImage = cv::Mat::zeros(images[0].size(), CV_8UC1);
 

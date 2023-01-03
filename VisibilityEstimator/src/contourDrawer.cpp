@@ -4,7 +4,7 @@
 
 namespace edge_detector
 {
-    void ContourDrawer::colorContours(cv::Mat frame, const std::vector<std::vector<cv::Point>>& contours)
+    void ContourDrawer::colorContours(const cv::Mat& frame, const std::vector<std::vector<cv::Point>>& contours)
     {
         for (int idx = 0; idx < contours.size(); idx++)
         {
@@ -13,7 +13,7 @@ namespace edge_detector
         }
     }
 
-    void ContourDrawer::drawHorizontalLine(cv::Mat frame, cv::Point point)
+    void ContourDrawer::drawHorizontalLine(const cv::Mat& frame, cv::Point point)
     {
         cv::Point p1(0, point.y);
         cv::Point p2(frame.cols, point.y);

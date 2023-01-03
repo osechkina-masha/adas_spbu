@@ -28,7 +28,7 @@ namespace edge_detector
         return sortedContoursIndices;
     }
 
-    cv::Point ContourOrdering::findPointWithMaxY(std::vector<cv::Point> contour)
+    cv::Point ContourOrdering::findPointWithMaxY(const std::vector<cv::Point>& contour)
     {
         return *max_element(contour.begin(), contour.end(),
             [](auto& left, auto& right)

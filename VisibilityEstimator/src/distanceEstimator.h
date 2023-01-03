@@ -1,6 +1,4 @@
 #pragma once
-#ifndef DISTANCEESTIMATOR_H
-#define DISTANCEESTIMATOR_H
 
 namespace distance_estimator
 {
@@ -25,5 +23,3 @@ namespace distance_estimator
             int horizon);
     };
 }
-
-#endif

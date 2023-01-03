@@ -1,6 +1,4 @@
 #pragma once
-#ifndef INVERSEPERSPECTIVEMAPPING_H
-#define INVERSEPERSPECTIVEMAPPING_H
 
 #include "opencv2/imgproc.hpp"
 #include "opencv2/imgcodecs.hpp"
@@ -12,7 +10,7 @@
 namespace distance_estimator
 {
     /**
-     * @brief Class that provides a set of methods for inverse perspective mapping.
+     * @brief Class that provides a set of methods for inverse perspective mapping. (unused in current project)
     */
     class InversePerspectiveMapping
     {
@@ -40,5 +38,3 @@ namespace distance_estimator
         static cv::Mat getMatrixWithoutSecondColumn(cv::Mat matrix);
     };
 }
-
-#endif

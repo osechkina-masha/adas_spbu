@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CONTOURORDERING_H
-#define CONTOURORDERING_H
 
 #include <opencv2/opencv.hpp>
 
@@ -17,7 +15,7 @@ namespace edge_detector
          * @param contour is the contour on which the point is searched.
          * @return Returns point with maximum Y value.
         */
-        static cv::Point findPointWithMaxY(std::vector<cv::Point> contour);
+        static cv::Point findPointWithMaxY(const std::vector<cv::Point>& contour);
 
         /**
          * @brief Sorts contours by their sizes int descending order 
@@ -27,5 +25,3 @@ namespace edge_detector
         static std::vector<int> sortContoursByTheirSizesDescending(std::vector<std::vector<cv::Point>> contours);
     };
 }
-
-#endif

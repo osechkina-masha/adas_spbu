@@ -11,7 +11,7 @@
 namespace edge_detector
 {
     std::vector<std::vector<cv::Point>> ContourMerger::connectContours(
-        std::vector<std::vector<cv::Point>> contours,
+        const std::vector<std::vector<cv::Point>>& contours,
         int imageSizeX,
         int imageSizeY)
     {
@@ -29,7 +29,6 @@ namespace edge_detector
         // Sorting by values the dictionary where key is contour index, value is contour size.
         auto sortedContoursIndices = ContourOrdering::sortContoursByTheirSizesDescending(contours);
 
-        // подумать, чем ограничить количество итераций
         // Merging contours.
         std::vector<std::vector<cv::Point>> newContours(contours);
         for (int i = 0; i < (sortedContoursIndices.size() < 15 ? sortedContoursIndices.size() : 15); i++)
@@ -44,9 +43,9 @@ namespace edge_detector
     }
 
     std::set<int> ContourMerger::findNearestContours(
-        std::vector<std::vector<cv::Point>> contours,
+        const std::vector<std::vector<cv::Point>>& contours,
         int mainContourIndex,
-        std::vector<std::vector<int>> contourIndexMatrix,
+        const std::vector<std::vector<int>>& contourIndexMatrix,
         cv::Point point)
     {
         std::set<int> foundContours;
@@ -74,10 +73,10 @@ namespace edge_detector
 
     // Returns vector where some contours have been merged.
     std::vector<std::vector<cv::Point>> ContourMerger::mergeContours(
-        std::vector<std::vector<cv::Point>> contours,
+        const std::vector<std::vector<cv::Point>>& contours,
         const std::vector<std::vector<int>>& indexMatrix,
         int mainContourIndex,
-        std::vector<cv::Point> mainContour)
+        const std::vector<cv::Point>& mainContour)
     {
         auto pointWithMaxY = ContourOrdering::findPointWithMaxY(std::move(mainContour));
 

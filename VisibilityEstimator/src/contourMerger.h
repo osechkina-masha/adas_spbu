@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CONTOURMERGER_H
-#define CONTOURMERGER_H
 
 #include "opencv2/imgproc.hpp"
 
@@ -23,7 +21,7 @@ namespace edge_detector
          * @return Vector of connected contours.
         */
         static std::vector<std::vector<cv::Point>> connectContours(
-            std::vector<std::vector<cv::Point>> contours,
+            const std::vector<std::vector<cv::Point>>& contours,
             int imageSizeX,
             int imageSizeY);
 
@@ -36,9 +34,9 @@ namespace edge_detector
          * @return Set of nearest contours.
         */
         static std::set<int> findNearestContours(
-            std::vector<std::vector<cv::Point>> contours,
+            const std::vector<std::vector<cv::Point>>& contours,
             int mainContourIndex,
-            std::vector<std::vector<int>> contourIndexMatrix,
+            const std::vector<std::vector<int>>& contourIndexMatrix,
             cv::Point point);
 
         /**
@@ -50,14 +48,12 @@ namespace edge_detector
          * @return Vector of connected contours.
         */
         static std::vector<std::vector<cv::Point>> mergeContours(
-            std::vector<std::vector<cv::Point>> contours,
+            const std::vector<std::vector<cv::Point>>& contours,
             const std::vector<std::vector<int>>& indexMatrix,
             int mainContourIndex,
-            std::vector<cv::Point> mainContour);
+            const std::vector<cv::Point>& mainContour);
 
     private:
         static std::vector<std::vector<cv::Point>> removeZeroSizeContours(std::vector<std::vector<cv::Point>> contours);
     };
 }
-
-#endif
