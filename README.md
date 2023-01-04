@@ -9,7 +9,6 @@ Genetic Algorithm was chosen for the project as a new and perspective way for op
 [EasyGA](https://github.com/danielwilczak101/EasyGA) library is used for Genetic algorithm implementation,
 fitness function is based on existing [clustering metrics](https://scikit-learn.org/stable/modules/clustering.html)
 
-
 ## Example of usage
 ```python
 Chooses best hyperparameters
