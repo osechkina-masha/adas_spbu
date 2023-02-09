@@ -59,24 +59,9 @@ class AUDIMethods:
         rows = (lidar['row'] + 0.5).astype(np.int)
         cols = (lidar['col'] + 0.5).astype(np.int)
 
-        # lowest distance values to be accounted for in colour code
-
-        MIN_DISTANCE = np.min(lidar['distance'])
-
-        # largest distance values to be accounted for in colour code
-
-        MAX_DISTANCE = np.max(lidar['distance'])
-
-        # get distances
-
-        distances = lidar['distance']
-
         # determine point colours from distance
 
         colours = local_colors
-
-        # colours = (distances - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)
-        # colours = np.asarray([np.asarray(AUDIMethods.hsv_to_rgb(0.75 * c, np.sqrt(pixel_opacity), 1.0)) for c in colours])
 
         pixel_rowoffs = np.indices([pixel_size, pixel_size])[0] \
             - pixel_size // 2
