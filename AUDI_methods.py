@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import open3d as o3d
 import numpy as np
-
+import open3d as o3d
 
 # Adopted from https://www.a2d2.audi/a2d2/en/tutorial.html
 
