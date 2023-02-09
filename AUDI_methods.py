@@ -4,7 +4,8 @@ import numpy as np
 import open3d as o3d
 
 
- # Adopted from https://www.a2d2.audi/a2d2/en/tutorial.html
+# Adopted from https://www.a2d2.audi/a2d2/en/tutorial.html
+
 
 class AUDIMethods:
 
@@ -29,8 +30,7 @@ class AUDIMethods:
         if cam_image is None:
             median_reflectance = np.median(lidar['reflectance'])
             colours = \
-                AUDIMethods.colours_from_reflectances(lidar['reflectance'
-                    ]) / (median_reflectance * 5)
+                AUDIMethods.colours_from_reflectances(lidar['reflectance']) / (median_reflectance * 5)
 
             # clip colours for visualisation on a white background
 
@@ -46,12 +46,12 @@ class AUDIMethods:
 
     @staticmethod
     def map_lidar_points_onto_image(
-        image_orig,
-        lidar,
-        local_colors,
-        pixel_size=3,
-        pixel_opacity=1,
-        ):
+            image_orig,
+            lidar,
+            local_colors,
+            pixel_size=3,
+            pixel_opacity=1,
+    ):
         image = np.copy(image_orig)
 
         # get rows and cols
@@ -63,10 +63,8 @@ class AUDIMethods:
 
         colours = local_colors
 
-        pixel_rowoffs = np.indices([pixel_size, pixel_size])[0] \
-            - pixel_size // 2
-        pixel_coloffs = np.indices([pixel_size, pixel_size])[1] \
-            - pixel_size // 2
+        pixel_rowoffs = np.indices([pixel_size, pixel_size])[0] - pixel_size // 2
+        pixel_coloffs = np.indices([pixel_size, pixel_size])[1] - pixel_size // 2
         canvas_rows = image.shape[0]
         canvas_cols = image.shape[1]
         for i in range(len(rows)):
@@ -74,16 +72,15 @@ class AUDIMethods:
                                  canvas_rows - 1)
             pixel_cols = np.clip(cols[i] + pixel_coloffs, 0,
                                  canvas_cols - 1)
-            image[pixel_rows, pixel_cols, :] = (1. - pixel_opacity) \
-                * np.multiply(image[pixel_rows, pixel_cols, :],
-                              colours[i]) + pixel_opacity * 255 \
-                * colours[i]
+            image[pixel_rows, pixel_cols, :] = (1. - pixel_opacity) * np.multiply(image[pixel_rows, pixel_cols, :],
+                                                                                  colours[i]) + pixel_opacity * 255 * \
+                                               colours[i]
         return image.astype(np.uint8)
 
     @staticmethod
     def hsv_to_rgb(h, s, v):
         if s == 0.0:
-            return (v, v, v)
+            return v, v, v
 
         i = int(h * 6.0)
         f = h * 6.0 - i
@@ -93,14 +90,14 @@ class AUDIMethods:
         i = i % 6
 
         if i == 0:
-            return (v, t, p)
+            return v, t, p
         if i == 1:
-            return (q, v, p)
+            return q, v, p
         if i == 2:
-            return (p, v, t)
+            return p, v, t
         if i == 3:
-            return (p, q, v)
+            return p, q, v
         if i == 4:
-            return (t, p, v)
+            return t, p, v
         if i == 5:
-            return (v, p, q)
+            return v, p, q
