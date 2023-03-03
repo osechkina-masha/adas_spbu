@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         cv::waitKey(0);
     }
     */
-    cv::Mat frame = cv::imread("C:/Users/Acer/source/repos/adas_spbu/traffic_signs_detection/2022-11-19 151239.png");
+    cv::Mat frame = cv::imread("../2022-11-19 151239.png");
    cv::imshow("yellow", frame);
     cv::Mat red = ImageSegmentation::highlightRed(frame);
     cv::Mat white = ImageSegmentation::highlightWhite(frame);
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
     std::vector<cv::Vec4f> trianglesBlue = DetectorPolygons::detectTriangle(blue);
     std::vector<cv::Vec4f> trianglesYellow = DetectorPolygons::detectTriangle(yellow);
     std::vector<cv::Vec4f> trianglesWhite = DetectorPolygons::detectTriangle(white);
-    cv::Mat templateTriangle = cv::imread("C:/Users/Acer/source/repos/adas_spbu/traffic_signs_detection/traffic_signs_detection/t.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat templateTriangle = cv::imread("t.png", cv::IMREAD_GRAYSCALE);
     int w = templateTriangle.cols;
     int h = templateTriangle.rows;
     for (std::vector<cv::Vec4f>::iterator iter = trianglesRed.begin(); iter != trianglesRed.end(); ++iter) {
