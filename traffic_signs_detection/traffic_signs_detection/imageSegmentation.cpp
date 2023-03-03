@@ -1,85 +1,85 @@
 ﻿#include "imageSegmentation.h"
 #include <iostream>
 
-cv::Mat imageSegmentation::highlightRed(const cv::Mat &originalImage)
+cv::Mat ImageSegmentation::highlightRed(const cv::Mat &originalImage)
 {
-	cv::Mat imageHSV;
-	cv::Mat redImage;
+    cv::Mat imageHSV;
+    cv::Mat redImage;
     cv::medianBlur(originalImage, originalImage, 1);
-	cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
-	cv::Mat redImage1, redImage2;
-	cv::inRange(imageHSV, cv::Scalar(0, 100, 20), cv::Scalar(10, 255, 255), redImage1);
-	cv::inRange(imageHSV, cv::Scalar(160, 100, 20), cv::Scalar(179, 255, 255), redImage2);
-	redImage = redImage1 + redImage2;
-	cv::medianBlur(redImage, redImage, 3);
-	cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 1 + 1, 2 * 1 + 1),
-		cv::Point(1, 1));
-	cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 3 + 1, 2 * 3 + 1),
-		cv::Point(3, 3));
-	erode(redImage, redImage, element);
-	dilate(redImage, redImage, element1);
-	cv::Mat final = cv::Mat::zeros(originalImage.size(), CV_8UC3);
-	cv::bitwise_and(originalImage, originalImage, final, redImage);
-	return final;
+    cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
+    cv::Mat redImage1, redImage2;
+    cv::inRange(imageHSV, cv::Scalar(0, 100, 20), cv::Scalar(10, 255, 255), redImage1);
+    cv::inRange(imageHSV, cv::Scalar(160, 100, 20), cv::Scalar(179, 255, 255), redImage2);
+    redImage = redImage1 + redImage2;
+    cv::medianBlur(redImage, redImage, 3);
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(3, 3),
+        cv::Point(1, 1));
+    cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(7, 7),
+        cv::Point(3, 3));
+    erode(redImage, redImage, element);
+    dilate(redImage, redImage, element1);
+    cv::Mat final = cv::Mat::zeros(originalImage.size(), CV_8UC3);
+    cv::bitwise_and(originalImage, originalImage, final, redImage);
+    return final;
 }
 
-cv::Mat imageSegmentation::highlightYellow(const cv::Mat &originalImage)
+cv::Mat ImageSegmentation::highlightYellow(const cv::Mat &originalImage)
 {   
-	cv::Mat yellowImage;
-	cv::Mat imageHSV;
-	cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
-	cv::inRange(imageHSV, cv::Scalar(20, 100, 100), cv::Scalar(30, 255, 255), yellowImage);
-	cv::medianBlur(yellowImage, yellowImage, 3);
-	cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 1 + 1, 2 * 1 + 1),
-		cv::Point(1, 1));
-	cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 3 + 1, 2 * 3 + 1),
-		cv::Point(3, 3));
-	erode(yellowImage, yellowImage, element);
-	dilate(yellowImage, yellowImage, element1);
-	cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
-	cv::bitwise_and(originalImage, originalImage, newImage, yellowImage);
-	return newImage;
+    cv::Mat yellowImage;
+    cv::Mat imageHSV;
+    cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
+    cv::inRange(imageHSV, cv::Scalar(20, 100, 100), cv::Scalar(30, 255, 255), yellowImage);
+    cv::medianBlur(yellowImage, yellowImage, 3);
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(2 * 1 + 1, 2 * 1 + 1),
+        cv::Point(1, 1));
+    cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(2 * 3 + 1, 2 * 3 + 1),
+        cv::Point(3, 3));
+    erode(yellowImage, yellowImage, element);
+    dilate(yellowImage, yellowImage, element1);
+    cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
+    cv::bitwise_and(originalImage, originalImage, newImage, yellowImage);
+    return newImage;
 }
 
-cv::Mat imageSegmentation::highlightBlue(const cv::Mat &originalImage)
+cv::Mat ImageSegmentation::highlightBlue(const cv::Mat &originalImage)
 {   
-	cv::Mat blueImage;
-	cv::Mat imageHSV;
-	cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
-	cv::inRange(imageHSV, cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255), blueImage);
-	cv::medianBlur(blueImage, blueImage, 3);
-	cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 1 + 1, 2 * 1 + 1),
-		cv::Point(1, 1));
-	cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 3 + 1, 2 * 3 + 1),
-		cv::Point(3, 3));
-	erode(blueImage, blueImage, element);
-	dilate(blueImage, blueImage, element1);
-	cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
-	cv::bitwise_and(originalImage, originalImage, newImage, blueImage);
-	return newImage;
+    cv::Mat blueImage;
+    cv::Mat imageHSV;
+    cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
+    cv::inRange(imageHSV, cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255), blueImage);
+    cv::medianBlur(blueImage, blueImage, 3);
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(2 * 1 + 1, 2 * 1 + 1),
+        cv::Point(1, 1));
+    cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(2 * 3 + 1, 2 * 3 + 1),
+        cv::Point(3, 3));
+    erode(blueImage, blueImage, element);
+    dilate(blueImage, blueImage, element1);
+    cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
+    cv::bitwise_and(originalImage, originalImage, newImage, blueImage);
+    return newImage;
 }
 
-cv::Mat imageSegmentation::highlightWhite(const cv::Mat &originalImage)
+cv::Mat ImageSegmentation::highlightWhite(const cv::Mat &originalImage)
 {
-	cv::Mat whiteImage;
-	cv::Mat imageHSV;
-	cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
-	cv::inRange(imageHSV, cv::Scalar(0, 0, 150), cv::Scalar(360, 60, 255), whiteImage);
-	cv::medianBlur(whiteImage, whiteImage, 3);
-	cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 1 + 1, 2 * 1 + 1),
-		cv::Point(1, 1));
-	cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
-		cv::Size(2 * 3 + 1, 2 * 3 + 1),
-		cv::Point(3, 3));
-	dilate(whiteImage, whiteImage, element1);
-	cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
-	cv::bitwise_and(originalImage, originalImage, newImage, whiteImage);
-	return newImage;
+    cv::Mat whiteImage;
+    cv::Mat imageHSV;
+    cv::cvtColor(originalImage, imageHSV, cv::COLOR_BGR2HSV);
+    cv::inRange(imageHSV, cv::Scalar(0, 0, 150), cv::Scalar(360, 60, 255), whiteImage);
+    cv::medianBlur(whiteImage, whiteImage, 3);
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(2 * 1 + 1, 2 * 1 + 1),
+        cv::Point(1, 1));
+    cv::Mat element1 = cv::getStructuringElement(cv::MORPH_ELLIPSE,
+        cv::Size(2 * 3 + 1, 2 * 3 + 1),
+        cv::Point(3, 3));
+    dilate(whiteImage, whiteImage, element1);
+    cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
+    cv::bitwise_and(originalImage, originalImage, newImage, whiteImage);
+    return newImage;
 }
