@@ -78,15 +78,16 @@ int main(int argc, char* argv[])
     }
     */
     cv::Mat frame = cv::imread("../2022-11-19 151239.png");
-   cv::imshow("yellow", frame);
+    cv::imshow("yellow", frame);
     cv::Mat red = ImageSegmentation::highlightRed(frame);
     cv::Mat white = ImageSegmentation::highlightWhite(frame);
     cv::Mat blue = ImageSegmentation::highlightBlue(frame);
     cv::Mat yellow = ImageSegmentation::highlightYellow(frame);
-    std::vector<cv::Vec3f> circlesRed = DetectorPolygons::detectCircle(red);
+    /*std::vector<cv::Vec3f> circlesRed = DetectorPolygons::detectCircle(red);
     std::vector<cv::Vec3f> circlesBlue = DetectorPolygons::detectCircle(blue);
     std::vector<cv::Vec3f> circlesYellow = DetectorPolygons::detectCircle(yellow);
     std::vector<cv::Vec3f> circlesWhite = DetectorPolygons::detectCircle(white);
+    */
     std::vector<cv::Vec4f> trianglesRed = DetectorPolygons::detectTriangle(red);
     std::vector<cv::Vec4f> trianglesBlue = DetectorPolygons::detectTriangle(blue);
     std::vector<cv::Vec4f> trianglesYellow = DetectorPolygons::detectTriangle(yellow);
@@ -104,7 +105,7 @@ int main(int argc, char* argv[])
             line(red, vertices[i], vertices[(i + 1) % 4], cv::Scalar(255, 0, 0), 6);
     }
 
-    for (size_t i = 0; i < circlesRed.size(); i++)
+ /* for (size_t i = 0; i < circlesRed.size(); i++)
     {
         cv::Vec3i coordinates = circlesRed[i];
         int radius = coordinates[2];
@@ -143,6 +144,7 @@ int main(int argc, char* argv[])
         cv::rectangle(white, upperVertex, lowerVertex, cv::Scalar(255, 0, 0), 2, cv::LINE_8);
         cv::rectangle(frame, upperVertex, lowerVertex, cv::Scalar(255, 0, 0), 2, cv::LINE_8);
     }
+    */
     cv::imshow("red", red);
     cv::imshow("white", white);
     cv::imshow("blue", blue);
