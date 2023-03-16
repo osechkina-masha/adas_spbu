@@ -6,24 +6,23 @@ std::vector<cv::Vec3f> DetectorPolygons::detectCircle(const cv::Mat &frame)
 {
     cv::Mat grayImage;
     cvtColor(frame, grayImage, cv::COLOR_BGR2GRAY);
-  //  medianBlur(grayImage, grayImage, 5);
     std::vector<cv::Vec3f> circles;
+    const int upperThreshold = 100;
+    const int thresholdForCenter = 30;
+    const int minRadius = 20;
+    const int maxRadius = 60;
     cv::HoughCircles(grayImage, circles, cv::HOUGH_GRADIENT, 1,
         grayImage.rows / 16,  
-        100, 30, 10, 40); 
+        upperThreshold, thresholdForCenter, minRadius, maxRadius);
     return circles;
 }
 
 std::vector<cv::Vec4f> DetectorPolygons::detectTriangle(const cv::Mat& frame)
 {
-    cv::Mat templateTriangle = cv::imread("t.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat templateTriangle = cv::imread("template.png", cv::IMREAD_GRAYSCALE);
     cv::Mat grayImage;
     cvtColor(frame, grayImage, cv::COLOR_BGR2GRAY);
     std::vector<cv::Vec4f> positionBallard;
-    //  template width and height
-    int w = templateTriangle.cols;
-    int h = templateTriangle.rows;
-    //  create ballard and set options
     cv::Ptr<cv::GeneralizedHoughBallard> ballard = cv::createGeneralizedHoughBallard();
     ballard->setMinDist(10);
     ballard->setLevels(360);
