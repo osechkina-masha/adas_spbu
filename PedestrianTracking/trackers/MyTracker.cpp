@@ -26,12 +26,12 @@ MyTracker::MyTracker() {
     setDefaultWeights();
 }
 
-void MyTracker::setWeights(std::vector<double> newWeights){
+void MyTracker::setWeights(std::vector<double> newWeights) {
     weights = std::move(newWeights);
 }
 
-void MyTracker::setDefaultWeights(){
-    weights = std::vector<double> {1,1,1,1};
+void MyTracker::setDefaultWeights() {
+    weights = std::vector<double>{1};
 }
 
 cv::Rect2d MyTracker::getMeanResult(std::vector<cv::Rect2d> &boundingBoxes) {
@@ -53,7 +53,7 @@ cv::Rect2d MyTracker::getNextPedestrianPosition() {
     static int nFrame = 0;
     nFrame++;
     std::vector<cv::Rect2d> boundingBoxes;
-    for (const auto& tracker: trackers) {
+    for (const auto &tracker: trackers) {
         boundingBoxes.push_back(tracker->getNextPedestrianPosition());
     }
     cv::Rect2d newBoundingBox = getMeanResult(boundingBoxes);
@@ -65,13 +65,13 @@ cv::Rect2d MyTracker::getNextPedestrianPosition() {
 }
 
 void MyTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
-    for (const auto& tracker: trackers) {
+    for (const auto &tracker: trackers) {
         tracker->init(path, pedestrian, nFrame);
     }
 }
 
 void MyTracker::reinit(cv::Rect2d boundingBox) {
-    for (const auto& tracker: trackers) {
+    for (const auto &tracker: trackers) {
         tracker->reinit(boundingBox);
     }
 }
