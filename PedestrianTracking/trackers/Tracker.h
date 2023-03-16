@@ -5,9 +5,11 @@
 
 class Tracker {
 public:
-    virtual void startTracking(const std::string &path, cv::Rect2d pedestrian, int nFrame) = 0;
+    virtual void init(const std::string &path, cv::Rect2d pedestrian, int nFrame) = 0;
 
     virtual cv::Rect2d getNextPedestrianPosition() = 0;
+
+    virtual ~Tracker() = default;
 
     virtual void reinit(cv::Rect2d boundingBox) = 0;
 

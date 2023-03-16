@@ -1,7 +1,7 @@
 #include <iostream>
 #include "GOTURNTracker.h"
 
-void GOTURNTracker::startTracking(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
+void GOTURNTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
     capture = cv::VideoCapture(path);
     pedestrianBox = pedestrian;
     tracker = cv::TrackerGOTURN::create();
