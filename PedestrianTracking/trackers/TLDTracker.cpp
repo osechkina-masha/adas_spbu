@@ -1,7 +1,9 @@
+
 #include <iostream>
 #include "TLDTracker.h"
 #include <opencv2/photo.hpp>
 #include <opencv2/tracking/tracking_legacy.hpp>
+
 void TLDTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
     capture = cv::VideoCapture(path);
     pedestrianBox = pedestrian;

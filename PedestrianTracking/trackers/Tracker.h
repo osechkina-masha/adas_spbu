@@ -11,6 +11,8 @@ public:
 
     virtual ~Tracker() = default;
 
+//    virtual void denoise(cv::Mat frame) = 0;
+
     virtual void reinit(cv::Rect2d boundingBox) = 0;
 
     Tracker();

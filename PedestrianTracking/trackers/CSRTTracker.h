@@ -6,27 +6,18 @@
 
 #include <opencv2/tracking.hpp>
 #include "Tracker.h"
+#include "TrackerPattern.h"
 
-class CSRTTracker : public Tracker {
-
+class CSRTTracker : public TrackerPattern {
 
 public:
     CSRTTracker();
 
-    void init(const std::string &path, cv::Rect2d pedestrian, int nFrame) override;
-
-    cv::Rect2d getNextPedestrianPosition() override;
-
-    void reinit(cv::Rect2d boundingBox);
+protected:
+    void denoise(cv::Mat frame) override;
 
 private:
-    cv::VideoCapture capture;
-    cv::Rect2i pedestrianBox;
-    cv::Ptr<cv::TrackerCSRT> tracker;
-    cv::Mat frame;
 
-    static void denoise(cv::Mat frame);
 };
-
 
 #endif //PEDESTRIANTRACKING_CSRTTRACKER_H
