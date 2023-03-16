@@ -2,21 +2,18 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/video/tracking.hpp>
 #include "OpticalFlowTracker.h"
-
+#include "constsForOpticalFlow.h"
 using namespace cv;
 
 OpticalFlowTracker::OpticalFlowTracker() = default;
 
 Point2f getMean(const std::vector<Point2f> &vec) {
-    float sumX = 0;
-    float sumY = 0;
+    Point2f mean(0.f,0.f);
     for (const Point2f &p: vec) {
-        sumX += p.x;
-        sumY += p.y;
+        mean+=p;
     }
-    float meanX = sumX / vec.size();
-    float meanY = sumY / vec.size();
-    return {meanX, meanY};
+    mean/=(float)vec.size();
+    return mean;
 
 }
 
@@ -38,12 +35,12 @@ void OpticalFlowTracker::updateBoxPosition() {
     pedestrianBox.y += boxMotion.y;
 }
 
-void OpticalFlowTracker::startTracking(const std::string &path, Rect2d pedestrian, int nFrame) {
+void OpticalFlowTracker::init(const std::string &path, Rect2d pedestrian, int nFrame) {
     capture = VideoCapture(path);
     pedestrianBox = pedestrian;
     for (int i = 0; i < nFrame; i++) { capture >> oldFrame; }
     cvtColor(oldFrame, oldGray, COLOR_BGR2GRAY);
-    goodFeaturesToTrack(oldGray(pedestrianBox), oldFeatures, featuresCount, 0.3, 7, Mat(), 7, false, 0.04);
+    goodFeaturesToTrack(oldGray(pedestrianBox), oldFeatures, featuresCount, qualityLevel, minDistance, Mat(), blockSize,  useHarrisDetector, hassisK);
 }
 
 void OpticalFlowTracker::reinit(cv::Rect2d boundingBox) {
@@ -56,16 +53,16 @@ Rect2d OpticalFlowTracker::getNextPedestrianPosition() {
     cvtColor(newFrame, newGray, COLOR_BGR2GRAY);
     std::vector<uchar> status;
     std::vector<float> err;
-    TermCriteria criteria = TermCriteria((TermCriteria::COUNT) + (TermCriteria::EPS), 10, 0.03);
+    TermCriteria criteria = TermCriteria((TermCriteria::COUNT) + (TermCriteria::EPS), termCriteriaMaxCount, termCriteriaEpsilon);
     calcOpticalFlowPyrLK(oldGray(pedestrianBox), newGray(pedestrianBox), oldFeatures, newFeatures, status, err,
-                         Size(15, 15), 2,
+                         Size(lkWindowWidth, lkWindowHeight), lkMaxDepth,
                          criteria);
     std::vector<Point2f> good_new = selectGoodFeatures(status, newFrame);
     updateBoxPosition();
     oldGray = newGray.clone();
     oldFeatures = good_new;
-    if (oldFeatures.size() < 5) {
-        goodFeaturesToTrack(newGray(pedestrianBox), oldFeatures, featuresCount, 0.3, 7, Mat(), 7, false, 0.04);
+    if (oldFeatures.size() <minPointsToTrack) {
+        goodFeaturesToTrack(newGray(pedestrianBox), oldFeatures, featuresCount, qualityLevel, minDistance, Mat(), blockSize,  useHarrisDetector, hassisK);
     }
     oldFrame = newFrame.clone();
     return pedestrianBox;

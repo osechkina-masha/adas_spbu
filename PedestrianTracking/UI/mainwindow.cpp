@@ -71,7 +71,7 @@ void MainWindow::showTracking(int nFrame) {
     box = selectROI(windowName, frame);
     destroyWindow(windowName);
     MyTracker tracker = MyTracker();
-    tracker.startTracking(path, box, nFrame);
+    tracker.init(path, box, nFrame);
     while (!frame.empty()) {
         if (state == WindowState::TRACKING) {
             box = tracker.getNextPedestrianPosition();

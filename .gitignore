@@ -3,7 +3,7 @@
 
 СMakeLists.txt.user
 
-/videos
+/PedestrianTracking/videos
 /.idea
 /cmake-build-debug
 /cmake-build-release

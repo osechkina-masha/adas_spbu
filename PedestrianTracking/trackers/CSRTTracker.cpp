@@ -1,24 +1,24 @@
 #include <iostream>
-#include "TLDTracker.h"
+#include "CSRTTracker.h"
 #include <opencv2/photo.hpp>
-#include <opencv2/tracking/tracking_legacy.hpp>
-void TLDTracker::startTracking(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
+
+void CSRTTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
     capture = cv::VideoCapture(path);
     pedestrianBox = pedestrian;
-    tracker = cv::legacy::TrackerTLD::create();
+    tracker = cv::TrackerCSRT::create();
     for (int i = 0; i < nFrame; i++) { capture >> frame; }
     denoise(frame);
     tracker->init(frame, pedestrianBox);
+
 }
 
-void TLDTracker::denoise(cv::Mat frame) {
+void CSRTTracker::denoise(cv::Mat frame) {
     cv::fastNlMeansDenoising(frame, frame, 30, 7, 21);
 }
 
-TLDTracker::TLDTracker() = default;
+CSRTTracker::CSRTTracker() = default;
 
-
-cv::Rect2d TLDTracker::getNextPedestrianPosition() {
+cv::Rect2d CSRTTracker::getNextPedestrianPosition() {
     capture >> frame;
     denoise(frame);
     if (!tracker->update(frame, pedestrianBox)) {
@@ -27,7 +27,8 @@ cv::Rect2d TLDTracker::getNextPedestrianPosition() {
     return pedestrianBox;
 }
 
-void TLDTracker::reinit(cv::Rect2d boundingBox) {
+void CSRTTracker::reinit(cv::Rect2d boundingBox) {
     tracker->init(frame, boundingBox);
     pedestrianBox = boundingBox;
+
 }
