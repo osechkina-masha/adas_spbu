@@ -2,7 +2,7 @@
 #include "CSRTTracker.h"
 #include <opencv2/photo.hpp>
 
-void CSRTTracker::startTracking(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
+void CSRTTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
     capture = cv::VideoCapture(path);
     pedestrianBox = pedestrian;
     tracker = cv::TrackerCSRT::create();

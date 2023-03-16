@@ -6,6 +6,16 @@
 #include "Tracker.h"
 
 class OpticalFlowTracker : public Tracker {
+
+
+public:
+    OpticalFlowTracker();
+    void init(const std::string& path, cv::Rect2d pedestrian, int nFrame) override;
+    cv::Rect2d getNextPedestrianPosition() override;
+
+    void reinit(cv::Rect2d boundingBox);
+
+private:
     cv::Mat oldFrame;
     cv::Mat oldGray;
     std::vector<cv::Point2f> oldFeatures, newFeatures;
@@ -16,13 +26,6 @@ class OpticalFlowTracker : public Tracker {
     cv::Rect2d pedestrianBox;
 
     std::vector<cv::Point2f> selectGoodFeatures(std::vector<uchar> &status, cv::Mat &frame);
-
-public:
-    OpticalFlowTracker();
-    void startTracking(const std::string& path, cv::Rect2d pedestrian, int nFrame) override;
-    cv::Rect2d getNextPedestrianPosition() override;
-
-    void reinit(cv::Rect2d boundingBox);
 };
 
 

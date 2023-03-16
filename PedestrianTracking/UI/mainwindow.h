@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "trackers/MyTracker.h"
+#include <opencv2/videoio.hpp>
 #include "WindowState.h"
 
 QT_BEGIN_NAMESPACE
