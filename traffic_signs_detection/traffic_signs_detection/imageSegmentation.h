@@ -9,15 +9,8 @@ class ImageSegmentation
 {
 public:
 
+    static cv::Mat highlightColor(const cv::Mat &originalImage, cv::Scalar lowerThreshold, cv::Scalar upperThreshold);
+
     // Red color segmentation
     static cv::Mat highlightRed(const cv::Mat &originalImage);
-
-    // Yellow color segmentation
-    static cv::Mat highlightYellow(const cv::Mat &originalImage);
-
-    // Blue color segmentation
-    static cv::Mat highlightBlue(const cv::Mat &originalImage);
-
-    // White color segmentation
-    static cv::Mat highlightWhite(const cv::Mat &originalImage);
 };
