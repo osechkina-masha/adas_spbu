@@ -3,26 +3,19 @@
 
 #include <opencv2/tracking.hpp>
 #include "Tracker.h"
+#include "TrackerPattern.h"
 
-class GOTURNTracker : public Tracker {
+class GOTURNTracker : public TrackerPattern {
 
 
 public:
     GOTURNTracker();
 
-    void init(const std::string &path, cv::Rect2d pedestrian, int nFrame) override;
+protected:
 
-    cv::Rect2d getNextPedestrianPosition() override;
-
-    void reinit(cv::Rect2d boundingBox);
+    void denoise(cv::Mat frame) override;
 
 private:
-    cv::VideoCapture capture;
-    cv::Rect2i pedestrianBox;
-    cv::Ptr<cv::TrackerGOTURN> tracker;
-    cv::Mat frame;
-
-    void denoise(cv::Mat frame);
 };
 
 

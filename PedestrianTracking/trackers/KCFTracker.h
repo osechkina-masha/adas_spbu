@@ -4,24 +4,19 @@
 
 #include <opencv2/tracking.hpp>
 #include "Tracker.h"
+#include "TrackerPattern.h"
 
-class KCFTracker : public Tracker {
+class KCFTracker : public TrackerPattern {
 
 public:
     KCFTracker();
 
-    void reinit(cv::Rect2d boundingBox) override;
+protected:
 
-    void init(const std::string &path, cv::Rect2d pedestrian, int nFrame) override;
+    void denoise(cv::Mat frame) override;
 
-    cv::Rect2d getNextPedestrianPosition() override;
+
 private:
-    cv::VideoCapture capture;
-    cv::Rect2i pedestrianBox;
-    cv::Ptr<cv::TrackerKCF> tracker;
-    cv::Mat frame;
-
-    void denoise(cv::Mat frame);
 };
 
 #endif //OPTICALFLOWTRACKING_KCFTRACKER_H
