@@ -19,7 +19,7 @@ std::vector<cv::Vec3f> DetectorPolygons::detectCircle(const cv::Mat &frame)
 
 std::vector<cv::Vec4f> DetectorPolygons::detectTriangle(const cv::Mat& frame)
 {
-    cv::Mat templateTriangle = cv::imread("template.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat templateTriangle = cv::imread("templates/template.png", cv::IMREAD_GRAYSCALE);
     cv::Mat grayImage;
     cvtColor(frame, grayImage, cv::COLOR_BGR2GRAY);
     std::vector<cv::Vec4f> positionBallard;
