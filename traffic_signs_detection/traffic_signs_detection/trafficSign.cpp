@@ -6,7 +6,7 @@ void TrafficSign::showTrafficSigns(const cv::Mat& colorImage, const cv::Mat &fra
 {
     std::vector<cv::Vec3f> circles = DetectorPolygons::detectCircle(colorImage);
     std::vector<cv::Vec4f> triangles = DetectorPolygons::detectTriangle(colorImage);
-    cv::Mat templateTriangle = cv::imread("template.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat templateTriangle = cv::imread("templates/template.png", cv::IMREAD_GRAYSCALE);
     int width = templateTriangle.cols;
     int height = templateTriangle.rows;
     for (std::vector<cv::Vec4f>::iterator iter = triangles.begin(); iter != triangles.end(); ++iter) {
@@ -16,7 +16,10 @@ void TrafficSign::showTrafficSigns(const cv::Mat& colorImage, const cv::Mat &fra
         cv::Point2f vertices[4];
         rRect.points(vertices);
         for (int i = 0; i < 4; i++)
+        {
             line(colorImage, vertices[i], vertices[(i + 1) % 4], cv::Scalar(255, 0, 0), 6);
+            line(frame, vertices[i], vertices[(i + 1) % 4], cv::Scalar(255, 0, 0), 6);
+        }
     }
     for (auto &circle : circles)
     {
