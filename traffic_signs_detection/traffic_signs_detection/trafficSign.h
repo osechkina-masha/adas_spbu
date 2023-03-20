@@ -10,5 +10,5 @@ class TrafficSign
 
 public:
 
-    static void TrafficSign::showTrafficSigns(const cv::Mat& colorImage, const cv::Mat& frame);
+    static void showTrafficSigns(const cv::Mat &colorImage, const cv::Mat &frame);
 };

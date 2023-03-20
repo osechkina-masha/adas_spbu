@@ -2,7 +2,7 @@
 #include "trafficSign.h"
 #include "detectorPolygons.h"
 
-void TrafficSign::showTrafficSigns(const cv::Mat& colorImage, const cv::Mat &frame)
+void TrafficSign::showTrafficSigns(const cv::Mat &colorImage, const cv::Mat &frame)
 {
     std::vector<cv::Vec3f> circles = DetectorPolygons::detectCircle(colorImage);
     std::vector<cv::Vec4f> triangles = DetectorPolygons::detectTriangle(colorImage);
