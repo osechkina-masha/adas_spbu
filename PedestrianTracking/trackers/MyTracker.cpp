@@ -10,18 +10,24 @@
 #include <iostream>
 #include "consts.h"
 
+
 MyTracker::MyTracker() {
     weightOfTracker.clear();
     trackers.clear();
     std::shared_ptr<Tracker> opticalFlowTracker(new OpticalFlowTracker());
     std::shared_ptr<Tracker> kcfTracker(new KCFTracker());
     std::shared_ptr<Tracker> csrtTracker(new CSRTTracker());
+#ifdef USE_LEGACY
+    std::cout << "use legacy" << std::endl;
     std::shared_ptr<Tracker> tldTracker(new TLDTracker());
+#endif
 
     trackers.push_back(opticalFlowTracker);
     trackers.push_back(kcfTracker);
     trackers.push_back(csrtTracker);
+#ifdef USE_LEGACY
     trackers.push_back(tldTracker);
+#endif
 
     setDefaultWeights();
 }
