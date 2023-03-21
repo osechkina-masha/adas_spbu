@@ -2,8 +2,13 @@
 #include "OpticalFlowTracker.h"
 #include "KCFTracker.h"
 #include "CSRTTracker.h"
+
+#ifdef USE_LEGACY
+
 #include "TLDTracker.h"
-#include "GOTURNTracker.h"
+
+#endif
+
 #include <utility>
 #include <vector>
 #include <numeric>

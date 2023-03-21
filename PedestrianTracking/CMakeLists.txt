@@ -14,7 +14,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #comment line below if you don't want to use legacy
 add_compile_definitions(USE_LEGACY)
 
-
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
