@@ -40,11 +40,14 @@ else ()
             trackers/KCFTracker.h
             trackers/CSRTTracker.cpp
             trackers/CSRTTracker.h
-            trackers/TLDTracker.cpp
-            trackers/TLDTracker.h
             trackers/GOTURNTracker.cpp
             trackers/GOTURNTracker.h
             UI/WindowState.h UI/BoundingBoxWidget.cpp UI/BoundingBoxWidget.h trackers/consts.h trackers/constsForOpticalFlow.h trackers/TrackerPattern.cpp trackers/TrackerPattern.h)
+    if (USE_LEGACY)
+        add_executable(Tracking
+            trackers/TLDTracker.cpp
+            trackers/TLDTracker.h)
+    endif()        
 endif ()
 
 find_package(OpenCV REQUIRED)
