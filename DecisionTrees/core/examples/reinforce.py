@@ -16,7 +16,7 @@ def predict_with_tree(tree, a, b):
     print(f"{a} + {b} = {prediction}")
 
 
-class SimpleDiscreteEnvironment(Environment):
+class SimpleEnvironment(Environment):
     def __init__(self) -> None:
         self._parameters_description = ParametersDescription().add_continuous("sum", 0, 6)
 
@@ -38,7 +38,7 @@ class SimpleDiscreteEnvironment(Environment):
         return (6 - abs(sum - self.a - self.b)) / 6
 
 
-learner = REINFORCELearner(env=SimpleDiscreteEnvironment())
+learner = REINFORCELearner(env=SimpleEnvironment())
 learner.fit()
 tree = learner.generate_tree()
 
