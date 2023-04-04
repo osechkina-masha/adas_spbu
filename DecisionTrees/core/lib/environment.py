@@ -1,15 +1,15 @@
-from abc import ABC, abstractmethod
+from .better_abc import ABCMeta, abstract_attribute
+from abc import abstractmethod
 from typing import Dict, Any
 from .description import ParametersDescription
 import numpy as np
 
 
-class Environment(ABC):
+class Environment(metaclass=ABCMeta):
     def __init__(self) -> None:
         self.reset()
 
-    @property
-    @abstractmethod
+    @abstract_attribute
     def parameters_description(self) -> ParametersDescription:
         ...
 

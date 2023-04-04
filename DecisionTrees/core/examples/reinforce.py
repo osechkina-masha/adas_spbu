@@ -17,22 +17,18 @@ def predict_with_tree(tree, a, b):
 
 
 class SimpleEnvironment(Environment):
-    def __init__(self) -> None:
-        self._parameters_description = ParametersDescription().add_continuous("sum", 0, 6)
-
-    @property
-    def parameters_description(self) -> ParametersDescription:
-        return self._parameters_description
+    parameters_description = \
+        ParametersDescription().add_continuous('sum', 0, 6)
 
     def reset(self):
         self.a = random.randint(0, 3)
         self.b = random.randint(0, 3)
-    
+
     def current_state(self):
         a_vec = one_hot(self.a, 4)
         b_vec = one_hot(self.b, 4)
         return np.hstack([a_vec, b_vec])
-    
+
     def score(self, parameters) -> float:
         sum = parameters['sum']
         return (6 - abs(sum - self.a - self.b)) / 6
