@@ -4,11 +4,10 @@
 #include <opencv2/photo.hpp>
 #include <opencv2/tracking/tracking_legacy.hpp>
 
-void TLDTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
-    capture = cv::VideoCapture(path);
+void TLDTracker::init(cv::Mat frame, cv::Rect2d pedestrian) {
     pedestrianBox = pedestrian;
+    this->frame = frame;
     tracker = cv::legacy::TrackerTLD::create();
-    for (int i = 0; i < nFrame; i++) { capture >> frame; }
     denoise(frame);
     tracker->init(frame, pedestrianBox);
 }
@@ -20,12 +19,10 @@ void TLDTracker::denoise(cv::Mat frame) {
 TLDTracker::TLDTracker() = default;
 
 
-cv::Rect2d TLDTracker::getNextPedestrianPosition() {
-    capture >> frame;
+cv::Rect2d TLDTracker::update(cv::Mat frame) {
+    this->frame = frame;
     denoise(frame);
-    if (!tracker->update(frame, pedestrianBox)) {
-        std::cout << "failed csrt tracking" << std::endl;
-    }
+    if (!tracker->update(frame, pedestrianBox)) {}
     return pedestrianBox;
 }
 

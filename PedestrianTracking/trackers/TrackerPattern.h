@@ -7,9 +7,9 @@
 
 class TrackerPattern : public Tracker {
 public:
-    void init(const std::string &path, cv::Rect2d pedestrian, int nFrame) override;
+    void init(cv::Mat frame, cv::Rect2d pedestrian) override;
 
-    cv::Rect2d getNextPedestrianPosition() override;
+    cv::Rect2d update(cv::Mat frame) override;
 
     void reinit(cv::Rect2d boundingBox) override;
 
@@ -19,7 +19,6 @@ protected:
     cv::Ptr<cv::Tracker> tracker;
 
 private:
-    cv::VideoCapture capture;
     cv::Rect2i pedestrianBox;
     cv::Mat frame;
 };

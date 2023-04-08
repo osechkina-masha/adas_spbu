@@ -60,12 +60,12 @@ cv::Rect2d MyTracker::getMeanResult(std::vector<cv::Rect2d> &boundingBoxes) {
     return cv::Rect2d(avgCenter, cv::Size(avgParams.x, avgParams.y));
 }
 
-cv::Rect2d MyTracker::getNextPedestrianPosition() {
+cv::Rect2d MyTracker::update(cv::Mat frame) {
     static int nFrame = 0;
     nFrame++;
     std::vector<cv::Rect2d> boundingBoxes;
     for (const auto &tracker: trackers) {
-        boundingBoxes.push_back(tracker->getNextPedestrianPosition());
+        boundingBoxes.push_back(tracker->update(frame));
     }
     cv::Rect2d newBoundingBox = getMeanResult(boundingBoxes);
     if (nFrame == framesBeforeReinitialization) {
@@ -75,9 +75,9 @@ cv::Rect2d MyTracker::getNextPedestrianPosition() {
     return newBoundingBox;
 }
 
-void MyTracker::init(const std::string &path, cv::Rect2d pedestrian, int nFrame) {
+void MyTracker::init(cv::Mat frame, cv::Rect2d pedestrian) {
     for (const auto &tracker: trackers) {
-        tracker->init(path, pedestrian, nFrame);
+        tracker->init(frame, pedestrian);
     }
 }
 

@@ -10,14 +10,13 @@ class TLDTracker : public Tracker {
 public:
     TLDTracker();
 
-    void init(const std::string &path, cv::Rect_<double> pedestrian, int nFrame) override;
+    void init(cv::Mat frame, cv::Rect_<double> pedestrian) override;
 
-    cv::Rect2d getNextPedestrianPosition() override;
+    cv::Rect2d update(cv::Mat) override;
 
     void reinit(cv::Rect2d boundingBox);
 
 private:
-    cv::VideoCapture capture;
     cv::Rect_<double> pedestrianBox;
     cv::Ptr<cv::legacy::TrackerTLD> tracker;
 

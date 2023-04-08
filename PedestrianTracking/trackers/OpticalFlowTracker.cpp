@@ -3,16 +3,17 @@
 #include <opencv2/video/tracking.hpp>
 #include "OpticalFlowTracker.h"
 #include "constsForOpticalFlow.h"
+
 using namespace cv;
 
 OpticalFlowTracker::OpticalFlowTracker() = default;
 
 Point2f getMean(const std::vector<Point2f> &vec) {
-    Point2f mean(0.f,0.f);
+    Point2f mean(0.f, 0.f);
     for (const Point2f &p: vec) {
-        mean+=p;
+        mean += p;
     }
-    mean/=(float)vec.size();
+    mean /= (float) vec.size();
     return mean;
 
 }
@@ -35,25 +36,24 @@ void OpticalFlowTracker::updateBoxPosition() {
     pedestrianBox.y += boxMotion.y;
 }
 
-void OpticalFlowTracker::init(const std::string &path, Rect2d pedestrian, int nFrame) {
-    capture = VideoCapture(path);
+void OpticalFlowTracker::init(cv::Mat oldFrame, Rect2d pedestrian) {
     pedestrianBox = pedestrian;
-    for (int i = 0; i < nFrame; i++) { capture >> oldFrame; }
     cvtColor(oldFrame, oldGray, COLOR_BGR2GRAY);
-    goodFeaturesToTrack(oldGray(pedestrianBox), oldFeatures, featuresCount, qualityLevel, minDistance, Mat(), blockSize,  useHarrisDetector, hassisK);
+    goodFeaturesToTrack(oldGray(pedestrianBox), oldFeatures, featuresCount, qualityLevel, minDistance, Mat(), blockSize,
+                        useHarrisDetector, hassisK);
 }
 
 void OpticalFlowTracker::reinit(cv::Rect2d boundingBox) {
     pedestrianBox = boundingBox;
 }
 
-Rect2d OpticalFlowTracker::getNextPedestrianPosition() {
-    Mat newFrame, newGray;
-    capture >> newFrame;
+Rect2d OpticalFlowTracker::update(cv::Mat newFrame) {
+    Mat newGray;
     cvtColor(newFrame, newGray, COLOR_BGR2GRAY);
     std::vector<uchar> status;
     std::vector<float> err;
-    TermCriteria criteria = TermCriteria((TermCriteria::COUNT) + (TermCriteria::EPS), termCriteriaMaxCount, termCriteriaEpsilon);
+    TermCriteria criteria = TermCriteria((TermCriteria::COUNT) + (TermCriteria::EPS), termCriteriaMaxCount,
+                                         termCriteriaEpsilon);
     calcOpticalFlowPyrLK(oldGray(pedestrianBox), newGray(pedestrianBox), oldFeatures, newFeatures, status, err,
                          Size(lkWindowWidth, lkWindowHeight), lkMaxDepth,
                          criteria);
@@ -61,8 +61,9 @@ Rect2d OpticalFlowTracker::getNextPedestrianPosition() {
     updateBoxPosition();
     oldGray = newGray.clone();
     oldFeatures = good_new;
-    if (oldFeatures.size() <minPointsToTrack) {
-        goodFeaturesToTrack(newGray(pedestrianBox), oldFeatures, featuresCount, qualityLevel, minDistance, Mat(), blockSize,  useHarrisDetector, hassisK);
+    if (oldFeatures.size() < minPointsToTrack) {
+        goodFeaturesToTrack(newGray(pedestrianBox), oldFeatures, featuresCount, qualityLevel, minDistance, Mat(),
+                            blockSize, useHarrisDetector, hassisK);
     }
     oldFrame = newFrame.clone();
     return pedestrianBox;

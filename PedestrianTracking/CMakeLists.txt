@@ -4,9 +4,6 @@ project(Tracking LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,54 +12,37 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(USE_LEGACY)
 set(USE_LEGACY_CMAKE true)
 
+SET(SOURCE_FILES main.cpp
+        trackers/MyTracker.cpp
+        trackers/MyTracker.h
+        trackers/Tracker.cpp
+        trackers/Tracker.h
+        trackers/OpticalFlowTracker.cpp
+        trackers/OpticalFlowTracker.h
+        trackers/KCFTracker.cpp
+        trackers/KCFTracker.h
+        trackers/CSRTTracker.cpp
+        trackers/CSRTTracker.h
+        trackers/GOTURNTracker.cpp
+        trackers/GOTURNTracker.h
+        trackers/consts.h trackers/constsForOpticalFlow.h trackers/TrackerPattern.cpp trackers/TrackerPattern.h)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
-
+SET(LEGACY_SOURCE_FILES trackers/TLDTracker.cpp trackers/TLDTracker.h)
 
 if (USE_LEGACY_CMAKE)
     add_executable(Tracking
-            main.cpp
-            UI/mainwindow.cpp
-            UI/mainwindow.h
-            UI/mainwindow.ui
-            trackers/MyTracker.cpp
-            trackers/MyTracker.h
-            trackers/Tracker.cpp
-            trackers/Tracker.h
-            trackers/OpticalFlowTracker.cpp
-            trackers/OpticalFlowTracker.h
-            trackers/KCFTracker.cpp
-            trackers/KCFTracker.h
-            trackers/CSRTTracker.cpp
-            trackers/CSRTTracker.h
-            trackers/GOTURNTracker.cpp
-            trackers/GOTURNTracker.h
-            UI/WindowState.h UI/BoundingBoxWidget.cpp UI/BoundingBoxWidget.h trackers/consts.h trackers/constsForOpticalFlow.h trackers/TrackerPattern.cpp trackers/TrackerPattern.h
-            trackers/TLDTracker.cpp
-            trackers/TLDTracker.h)
+            ${SOURCE_FILES}
+            ${LEGACY_SOURCE_FILES})
 else ()
     add_executable(Tracking
-            main.cpp
-            UI/mainwindow.cpp
-            UI/mainwindow.h
-            UI/mainwindow.ui
-            trackers/MyTracker.cpp
-            trackers/MyTracker.h
-            trackers/Tracker.cpp
-            trackers/Tracker.h
-            trackers/OpticalFlowTracker.cpp
-            trackers/OpticalFlowTracker.h
-            trackers/KCFTracker.cpp
-            trackers/KCFTracker.h
-            trackers/CSRTTracker.cpp
-            trackers/CSRTTracker.h
-            trackers/GOTURNTracker.cpp
-            trackers/GOTURNTracker.h
-            UI/WindowState.h UI/BoundingBoxWidget.cpp UI/BoundingBoxWidget.h trackers/consts.h trackers/constsForOpticalFlow.h trackers/TrackerPattern.cpp trackers/TrackerPattern.h)
+            ${SOURCE_FILES})
 endif ()
 
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-target_link_libraries(Tracking PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${OpenCV_LIBS})
+
+target_link_libraries(Tracking PRIVATE ${OpenCV_LIBS})
+
+add_library(TrackingLib SHARED ${SOURCE_FILES} ${LEGACY_SOURCE_FILES})
+target_link_libraries(TrackingLib PRIVATE ${OpenCV_LIBS})
