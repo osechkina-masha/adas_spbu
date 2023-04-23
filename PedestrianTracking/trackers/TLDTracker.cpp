@@ -13,7 +13,7 @@ void TLDTracker::init(cv::Mat frame, cv::Rect2d pedestrian) {
 }
 
 void TLDTracker::denoise(cv::Mat frame) {
-    cv::fastNlMeansDenoising(frame, frame, 30, 7, 21);
+//    cv::fastNlMeansDenoising(frame, frame, 30, 7, 21);
 }
 
 TLDTracker::TLDTracker() = default;

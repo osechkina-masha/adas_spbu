@@ -4,7 +4,6 @@ project(Tracking LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -25,7 +24,7 @@ SET(SOURCE_FILES main.cpp
         trackers/CSRTTracker.h
         trackers/GOTURNTracker.cpp
         trackers/GOTURNTracker.h
-        trackers/consts.h trackers/constsForOpticalFlow.h trackers/TrackerPattern.cpp trackers/TrackerPattern.h)
+        trackers/consts.h trackers/constsForOpticalFlow.h trackers/TrackerPattern.cpp trackers/TrackerPattern.h base64.h base64.cpp)
 
 SET(LEGACY_SOURCE_FILES trackers/TLDTracker.cpp trackers/TLDTracker.h)
 
@@ -40,9 +39,14 @@ endif ()
 
 
 find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
+find_package(cpprestsdk REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 
-target_link_libraries(Tracking PRIVATE ${OpenCV_LIBS})
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(Tracking PRIVATE ${OpenCV_LIBS} PRIVATE cpprestsdk::cpprest)
+
 
 add_library(TrackingLib SHARED ${SOURCE_FILES} ${LEGACY_SOURCE_FILES})
 target_link_libraries(TrackingLib PRIVATE ${OpenCV_LIBS})
+
+

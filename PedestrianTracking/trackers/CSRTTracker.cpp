@@ -8,6 +8,6 @@ CSRTTracker::CSRTTracker() {
 }
 
 void CSRTTracker::denoise(cv::Mat frame) {
-    cv::fastNlMeansDenoising(frame, frame, 30, 7, 21);
+//    cv::fastNlMeansDenoising(frame, frame, 30, 7, 21);
 }
 

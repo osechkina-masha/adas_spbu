@@ -1,7 +1,6 @@
 #ifndef ADAS_SPBU_TRACKERPATTERN_H
 #define ADAS_SPBU_TRACKERPATTERN_H
 
-
 #include <opencv2/video/tracking.hpp>
 #include "Tracker.h"
 

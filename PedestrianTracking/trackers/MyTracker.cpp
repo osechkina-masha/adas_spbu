@@ -13,6 +13,7 @@
 #include <vector>
 #include <numeric>
 #include <iostream>
+#include <memory>
 #include "consts.h"
 
 
@@ -24,10 +25,11 @@ MyTracker::MyTracker() {
     std::shared_ptr<Tracker> csrtTracker(new CSRTTracker());
 #ifdef USE_LEGACY
     std::cout << "use legacy" << std::endl;
+
     std::shared_ptr<Tracker> tldTracker(new TLDTracker());
 #endif
 
-    trackers.push_back(opticalFlowTracker);
+//    trackers.push_back(opticalFlowTracker);
     trackers.push_back(kcfTracker);
     trackers.push_back(csrtTracker);
 #ifdef USE_LEGACY
@@ -42,7 +44,7 @@ void MyTracker::setWeights(std::vector<double> newWeights) {
 }
 
 void MyTracker::setDefaultWeights() {
-    weights = std::vector<double>{1};
+    weights = std::vector<double>{1,1,1,1};
 }
 
 cv::Rect2d MyTracker::getMeanResult(std::vector<cv::Rect2d> &boundingBoxes) {
@@ -76,6 +78,7 @@ cv::Rect2d MyTracker::update(cv::Mat frame) {
 }
 
 void MyTracker::init(cv::Mat frame, cv::Rect2d pedestrian) {
+    std::cout<<"inited"<<std::endl;
     for (const auto &tracker: trackers) {
         tracker->init(frame, pedestrian);
     }

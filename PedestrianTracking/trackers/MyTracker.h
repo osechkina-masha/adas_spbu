@@ -12,10 +12,10 @@ public:
 
     MyTracker();
 
-    //reinit every tracker by bounding box
+    //reinit all trackers by bounding box
     void reinit(cv::Rect2d boundingBox);
 
-    //tracker initialization. Path - path to video, bounding box, nFrame - number of frame where from tracking should start
+    //tracker initialization
     void init(cv::Mat frame, cv::Rect2d pedestrian) override;
 
     //gives mean result from several trackers
