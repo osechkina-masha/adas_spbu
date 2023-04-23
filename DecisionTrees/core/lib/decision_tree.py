@@ -1,12 +1,15 @@
 from abc import ABC, abstractmethod
+from typing import Any, Dict, List
+
 import numpy as np
-from numpy import ndarray
-from typing import Dict, Any, List
 import pandas as pd
-import json
-from sklearn.tree import DecisionTreeRegressor
+from numpy import ndarray
 from sklearn.model_selection import GridSearchCV
-from .description import NormalizedParameters, ParametersDescription, DiscreteParameterDescription, ContinuousParameterDescription
+from sklearn.tree import DecisionTreeRegressor
+
+from .description import (ContinuousParameterDescription,
+                          DiscreteParameterDescription, NormalizedParameters,
+                          ParametersDescription)
 
 
 class IDecisionTree(ABC):
@@ -67,20 +70,29 @@ class SklearnDecisionTree(IDecisionTree):
         for column_id, p_name in enumerate(self._p_names):
             decoder = self._param_description.get_description(p_name)
             if isinstance(decoder, DiscreteParameterDescription):
-                column = np.vectorize(lambda p_v: decoder.decode(p_v))(values[:, column_id, :])
+                column = np.vectorize(lambda p_v: decoder.decode(round(p_v)))(values[:, column_id, :])
             elif isinstance(decoder, ContinuousParameterDescription):
                 column = np.vectorize(lambda p_v: decoder.scale(p_v))(values[:, column_id, :])
             else:
                 raise ValueError("This decoder is not supported")
-            decoded_columns[p_name] = column.tolist()
-            
-        as_json = {
-            "children_left": tree.children_left.tolist(),
-            "children_right": tree.children_right.tolist(),
-            "feature": tree.feature.tolist(),
-            "threshold": tree.threshold.tolist(),
-            "value": decoded_columns
-        }
+            decoded_columns[p_name] = column.T.tolist()
 
-        with open(filename, 'w') as file:
-            json.dump(as_json, file, indent=2)
+        with open(filename, "w") as file:
+            file.write(f"Node count\n{tree.node_count}")
+
+            def write_array(name, arr, sep=" "):
+                file.write(f"\n{name}\n")
+                as_str = map(str, arr)
+                file.write(sep.join(as_str))
+
+            write_array("Children left", tree.children_left)
+            write_array("Children right", tree.children_right)
+            write_array("Feature", tree.feature)
+            write_array("Threshold", tree.threshold)
+
+            file.write("\nValues")
+            for f_name, f_list in decoded_columns.items():
+                file.write(f"\n{f_name}\n")
+                file.write("\n".join(map(str, f_list[0])))
+
+        return super().save(filename)
