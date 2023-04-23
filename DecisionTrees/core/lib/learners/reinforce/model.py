@@ -1,11 +1,14 @@
+from dataclasses import dataclass
+from typing import Dict, Optional
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
-from ...description import ParametersDescription, DiscreteParameterDescription, ContinuousParameterDescription
-from typing import Dict, Optional
-from dataclasses import dataclass
-import random
+
+from ...description import (ContinuousParameterDescription,
+                            DiscreteParameterDescription,
+                            ParametersDescription)
 
 
 @dataclass
@@ -16,12 +19,29 @@ class Policy:
 
 
 class REINFORCEModel(nn.Module):
-    def __init__(self, inp_dim: int, hidden_dim: int, parameters: ParametersDescription) -> None:
+    def __init__(self,
+                 parameters: ParametersDescription,
+                 inp_dim: int, 
+                 hidden_dim: int = 512,
+                 n_common_layers: int = 2,
+                 with_critic: bool = False,
+                 critic_hidden_dim: int = 512,
+                 n_critic_hidden_layers: int = 1) -> None:
         super().__init__()
 
         self._param_names = [p[0] for p in parameters.items()]
-        self.common_layer_l1 = nn.Linear(inp_dim, hidden_dim)
-        self.common_layer_l2 = nn.Linear(hidden_dim, hidden_dim)
+
+        if n_common_layers == 0:
+            hidden_dim = inp_dim
+            self.common = nn.Sequential()
+        else:
+            layers = [nn.Linear(inp_dim, hidden_dim), nn.ReLU()]
+            for i in range(1, n_common_layers):
+                layers.extend([
+                    nn.Linear(hidden_dim, hidden_dim),
+                    nn.ReLU()
+                ])
+            self.common = nn.Sequential(*layers)
 
         self.discrete_layers = nn.ModuleDict()
         self.continuous_layers_means = nn.ModuleDict()
@@ -34,38 +54,37 @@ class REINFORCEModel(nn.Module):
                 self.continuous_layers_means[p_name] = nn.Linear(hidden_dim, 1)
                 self.continuous_layers_std[p_name] = nn.Linear(hidden_dim, 1)
 
-    def forward(self, x: Tensor, grad_parameter: Optional[str] = None) -> Policy:
-        if grad_parameter is None:
-            grad_parameter = random.choice(self._param_names)
+        if with_critic:
+            critic_layers = [nn.Linear(inp_dim + hidden_dim, critic_hidden_dim), nn.ReLU()]
+            for _ in range(n_critic_hidden_layers):
+                critic_layers.extend([
+                    nn.Linear(hidden_dim, hidden_dim), nn.ReLU()
+                ])
+            critic_layers.append(nn.Linear(critic_hidden_dim, 1))
+            self.critic = nn.Sequential(*critic_layers)
 
-        x = F.relu(self.common_layer_l1(x))
-        x = F.relu(self.common_layer_l2(x))
+    def forward(self, x: Tensor) -> Policy:
+        x = self.common(x)
 
         discrete_policy = {}
         for p_name, p_layer in self.discrete_layers.items():
-            y = x
-            if p_name != grad_parameter:
-                y = x.detach()
-
-            discrete_policy[p_name] = F.softmax(p_layer(y), dim=-1)
+            discrete_policy[p_name] = F.softmax(p_layer(x), dim=-1)
 
         continuous_mean_policy = {}
         continuous_std_policy = {}
         for p_name in self.continuous_layers_means.keys():
-            y = x
-            if p_name != grad_parameter:
-                y = x.detach()
-
             mean_layer = self.continuous_layers_means[p_name]
             std_layer = self.continuous_layers_std[p_name]
 
-            mean_policy = torch.sigmoid(mean_layer(y))
-            std_policy = F.softplus(std_layer(y))
+            mean_policy = torch.sigmoid(mean_layer(x))
+            std_policy = F.softplus(std_layer(x))
 
             continuous_mean_policy[p_name] = mean_policy
             continuous_std_policy[p_name] = std_policy
 
-        return Policy(discrete_policy, continuous_mean_policy, continuous_std_policy)
+        return Policy(discrete_policy,
+                      continuous_mean_policy, 
+                      continuous_std_policy)
 
     def __call__(self, x: Tensor) -> Policy:
         return super().__call__(x)

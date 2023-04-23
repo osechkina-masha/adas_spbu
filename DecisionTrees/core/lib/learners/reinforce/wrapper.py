@@ -19,7 +19,10 @@ class REINFORCELearner(Learner):
                  save_model_every_n_steps: int = 10,
                  checkpoint_path: Optional[str] = None,
                  discrete_entropy_beta: float = 0.05,
-                 continuous_entropy_beta: float = 0.05):
+                 continuous_entropy_beta: float = 0.05,
+                 use_critic: bool = False,
+                 n_model_common_layers: int = 2,
+                 n_critic_layers: int = 2):
         self._env = env
         self._n_epochs = n_epochs
         self._hidden_dim = hidden_dim
@@ -35,10 +38,15 @@ class REINFORCELearner(Learner):
         inp_size = v.shape[0]
 
         self._model = REINFORCEModel(
-            inp_size,
-            self._hidden_dim,
-            env.parameters_description
+            parameters=env.parameters_description,
+            inp_dim=inp_size,
+            hidden_dim=hidden_dim,
+            n_common_layers=n_model_common_layers,
+            with_critic=use_critic,
+            n_critic_hidden_layers=n_critic_layers
         )
+        print("Model initialized")
+        print(self._model)
 
         self._is_trained = False
 
@@ -62,14 +70,15 @@ class REINFORCELearner(Learner):
             raise ValueError("Tried to call generate_tree on untrained learner")
         states = []
         params = []
-        for i in range(iterations):
-            self._env.reset()
-            state = torch.from_numpy(self._env.current_state()).float()
-            policy = self._model(state)
-            action = gready_sampling(policy)
+        with torch.no_grad():
+            for i in range(iterations):
+                self._env.reset()
+                state = torch.from_numpy(self._env.current_state()).float()
+                policy = self._model(state)
+                action = gready_sampling(policy)
 
-            states.append(state)
-            params.append(action)
+                states.append(state)
+                params.append(action)
         tree = SklearnDecisionTree(states, params, self._env.parameters_description)
         return tree
  

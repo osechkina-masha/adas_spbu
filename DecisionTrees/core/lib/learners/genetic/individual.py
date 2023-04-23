@@ -23,7 +23,7 @@ class Individual:
         for p_name, p_decoder in self._param_desc.items():
             if random.random() <= ind_mut_pb:
                 if isinstance(p_decoder, DiscreteParameterDescription):
-                    self._discrete[p_name] = random.randint(0, p_decoder.n_categories)
+                    self._discrete[p_name] = random.randint(0, p_decoder.n_categories - 1)
                 elif isinstance(p_decoder, ContinuousParameterDescription):
                     self._continuous[p_name] = random.random()
                 else:

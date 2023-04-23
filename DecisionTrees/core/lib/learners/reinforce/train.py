@@ -1,15 +1,15 @@
+import os
+from typing import Optional
+
 import torch
 from torch import Tensor
 from torch.optim import Adam
 from tqdm import trange
-import os
-import random
+from torch import nn
 
-from .model import Policy, REINFORCEModel
 from ...description import NormalizedParameters
 from ...environment import Environment
-
-from typing import Optional
+from .model import Policy, REINFORCEModel
 
 
 def sample_from_policy(policy: Policy) -> NormalizedParameters:
@@ -57,18 +57,33 @@ def train_reinforce(model: REINFORCEModel,
     # for p in model.parameters():
     #     p.register_hook(lambda grad: torch.clamp(grad, -1.0, 1.0))
 
-    loss_sum = torch.Tensor([0])
+    critic = None
+    critic_optimizer = None
+    with_critic = hasattr(model, "critic")
+    if with_critic:
+        critic = model.critic
+        critic_optimizer = Adam(params=critic.parameters())
+
+    # loss_sum = torch.Tensor([0])
     for episode in trange(epochs, desc="Training REINFORCE"):
         # Slowly decreasing entropy multiplier
         entropy_mult = ((epochs - episode) / epochs)
 
         # Forward pass
         env.reset()
-        state = env.current_state()
-        policy = model(torch.from_numpy(state).float())
+        state = torch.from_numpy(env.current_state()).float()
+        policy = model(state)
         action = sample_from_policy(policy)
         parameters = env.parameters_description.decode_parameters(action)
         reward = env.score(parameters)
+
+        if with_critic:
+            original_reward = reward
+            x = torch.cat((state, model.common(state).detach()))
+            critic_prediction = critic(x)
+            critic_loss = nn.functional.huber_loss(critic_prediction, torch.Tensor([original_reward]))
+            critic_loss.backward()
+            reward -= critic_prediction.item()
 
         # Calculating loss
         loss = torch.Tensor([0]).float()
@@ -81,20 +96,20 @@ def train_reinforce(model: REINFORCEModel,
             var_v = var_v.clamp(min=1e-3)
             loss += - normal_logprob(mu_v, var_v, torch.Tensor([action.continuous[name]])) * reward
             loss += - entropy_mult * continuous_entropy_beta * normal_entropy(var_v)
-        loss_sum += loss
+        loss /= batch_size
+        loss.backward()
 
         # Backward pass
         if episode % batch_size == 0 and episode != 0:
-            loss_sum = loss_sum / batch_size
-            loss_sum.backward()
             optimizer.step()
             optimizer.zero_grad()
-            loss_sum = torch.Tensor([0])
+            if with_critic:
+                critic_optimizer.step()
+                critic_optimizer.zero_grad()
 
             # Saving model if checkpoint path provided
             if checkpoint_path is not None and episode % (batch_size * save_model_every_n_steps) == 0:
                 torch.save(model.state_dict(), os.path.join(checkpoint_path, f"epoch_{episode}.pt"))
 
     # Last backward pass
-    loss_sum.backward()
     optimizer.step()
