@@ -68,7 +68,7 @@ void handle_post(http_request request) {
 int main() {
     std::cout << "Started main" << std::endl;
 
-    http_listener listener("http://localhost:2390");
+    http_listener listener("http://0.0.0.0:2390");
     listener.support(methods::POST, handle_post);
     listener.support(methods::GET, handle_get);
 
