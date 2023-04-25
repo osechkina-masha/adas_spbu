@@ -40,7 +40,7 @@ endif ()
 
 find_package(OpenCV REQUIRED)
 find_package(cpprestsdk REQUIRED)
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
+#find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Tracking PRIVATE ${OpenCV_LIBS} PRIVATE cpprestsdk::cpprest)
