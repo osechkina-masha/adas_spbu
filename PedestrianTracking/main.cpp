@@ -27,6 +27,8 @@ cv::Mat GetImageFromMemory(uchar *image, int length, int flag) {
 
 
 void handle_get(http_request request) {
+    std::cout << "get" << std::endl;
+
     TRACE(L"\nhandle GET\n");
 
     request.extract_json().then([request](web::json::value body) {
@@ -46,6 +48,7 @@ void handle_get(http_request request) {
 
 
 void handle_post(http_request request) {
+    std::cout << "post" << std::endl;
     TRACE("\nhandle POST\n");
     request.extract_json().then([request](web::json::value body) {
 
