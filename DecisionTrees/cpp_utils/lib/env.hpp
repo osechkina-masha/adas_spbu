@@ -1,5 +1,4 @@
-#ifndef decision_cpp_env
-#define decision_cpp_env
+#pragma once
 
 #include <string>
 #include <vector>
@@ -42,8 +41,8 @@ class ParametersDescription {
         vector<ContinuousParameter> continuous;
         vector<DiscreteParameter> discrete;
     public:
-        ParametersDescription* add_continuous(double min_value, double max_value);
-        ParametersDescription* add_discrete(vector<string> values);
+        ParametersDescription* add_continuous(string name, double min_value, double max_value);
+        ParametersDescription* add_discrete(string name, vector<string> values);
         vector<DiscreteParameter> get_discrete();
         vector<ContinuousParameter> get_continuous();
 };
@@ -62,5 +61,3 @@ class CppEnvironment {
 
         void communicate();
 };
-
-#endif

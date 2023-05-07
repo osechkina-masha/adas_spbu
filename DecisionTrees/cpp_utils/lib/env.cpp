@@ -5,7 +5,6 @@
 #include <map>
 #include <cassert>
 #include <sstream>
-#include <ctime>
 #include "env.hpp"
 
 using std::vector;
@@ -53,14 +52,16 @@ string ContinuousParameter::serialize() {
 
 
 // Parameters description
-ParametersDescription* ParametersDescription::add_continuous(double min_value, double max_value) {
+ParametersDescription* ParametersDescription::add_continuous(string name, double min_value, double max_value) {
     ContinuousParameter param(min_value, max_value);
+    param.set_name(name);
     this->continuous.push_back(param);
     return this;
 }
 
-ParametersDescription* ParametersDescription::add_discrete(vector<string> values) {
+ParametersDescription* ParametersDescription::add_discrete(string name, vector<string> values) {
     DiscreteParameter param(values);
+    param.set_name(name);
     this->discrete.push_back(param);
     return this;
 }
@@ -126,36 +127,3 @@ void CppEnvironment::communicate() {
     }
 }
 
-// class SumEnvironment: public CppEnvironment {
-//     private:
-//         int a;
-//         int b;
-//     public:
-//         using CppEnvironment::CppEnvironment;
-
-//         double score(map<string, string> &parameters) {
-//             double sum = stod(parameters["sum"]);
-//             return -std::abs(sum - this->a - this->b) / 6.0;
-//         }
-//         void reset() {
-//             this->a = std::rand() % 4;
-//             this->b = std::rand() % 4;
-//         }
-//         vector<double> current_state() {
-//             vector<double> state_vec = {0.0, 0.0, 0.0, 0.0,
-//                                         0.0, 0.0, 0.0, 0.0};
-//             state_vec[this->a] = 1.0;
-//             state_vec[this->b + 4] = 1.0;
-//             return state_vec;
-//         }
-// };
-
-
-
-// int main() {
-//     std::srand(std::time(nullptr)); // use current time as seed for random generator
-//     ParametersDescription desc;
-//     desc.add_continuous(0, 4);
-//     SumEnvironment env(desc);
-//     env.communicate();
-// }   
