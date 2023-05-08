@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
     if (argc != 2)
     {
-        return 1;
+       return 1;
     }
     cv::VideoCapture video(argv[1]);
     if (!video.isOpened())
@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
     {
         cv::Mat frame;
         video >> frame;
+        cv::Mat frame = cv::imread("2.jpg");
         cv::Mat red = ImageSegmentation::highlightRed(frame);
         cv::Mat white = ImageSegmentation::highlightColor(frame, cv::Scalar(0, 0, 150), cv::Scalar(360, 60, 255));
         cv::Mat blue = ImageSegmentation::highlightColor(frame, cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));

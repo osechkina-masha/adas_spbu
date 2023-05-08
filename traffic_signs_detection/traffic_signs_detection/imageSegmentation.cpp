@@ -1,7 +1,6 @@
 ﻿#include "imageSegmentation.h"
 #include <iostream>
 
-
 cv::Mat ImageSegmentation::highlightColor(const cv::Mat& originalImage, cv::Scalar lowerBoundary, cv::Scalar upperBoundary)
 {
     cv::Mat colorImage;

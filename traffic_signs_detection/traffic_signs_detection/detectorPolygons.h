@@ -10,8 +10,10 @@ class DetectorPolygons
 
 public:
     
-    // Detects circles in an image
-    static std::vector<cv::Vec3f> detectCircle(const cv::Mat &frame);
-    
-    static std::vector<cv::Vec4f> detectTriangle(const cv::Mat& frame);
+    // Detects shapes in an image
+    static std::vector<cv::Rect> detectShape(const cv::Mat &frame);
+
+private:
+
+    static double angle (cv::Point pt1, cv::Point pt2, cv::Point pt0);
 };

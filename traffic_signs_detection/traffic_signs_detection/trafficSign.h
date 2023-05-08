@@ -7,7 +7,6 @@
 
 class TrafficSign
 {
-
 public:
 
     static void showTrafficSigns(const cv::Mat &colorImage, const cv::Mat &frame);
