@@ -12,6 +12,7 @@ using namespace utility::conversions;
 #include <set>
 #include <string>
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace std;
 
@@ -36,20 +37,21 @@ void handle_get(http_request request) {
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
         cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
+        cv::cvtColor(m, m, cv::COLOR_BGRA2RGB);
 
-//        cv::Rect2d ped = tracker.update(m);
+        cv::Rect2d ped = tracker.update(m);
         json::value obj;
 
-//        obj[U("x")] = U(int(ped.x));
-//        obj[U("y")] = U(int(ped.y));
-//        obj[U("height")] = U(int(ped.size().height));
-//        obj[U("width")] = U(int(ped.size().width));
+        obj[U("x")] = U(int(ped.x));
+        obj[U("y")] = U(int(ped.y));
+        obj[U("height")] = U(int(ped.size().height));
+        obj[U("width")] = U(int(ped.size().width));
 
 
-        obj[U("x")] = U(100);
-        obj[U("y")] = U(100);
-        obj[U("height")] = U(200);
-        obj[U("width")] = U(300);
+//        obj[U("x")] = U(100);
+//        obj[U("y")] = U(100);
+//        obj[U("height")] = U(200);
+//        obj[U("width")] = U(300);
         request.reply(status_codes::OK, obj);
     });
 }
@@ -63,6 +65,7 @@ void handle_post(http_request request) {
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
         cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
+        cv::cvtColor(m, m, cv::COLOR_BGRA2RGB);
 
         double x = body.at(U("x")).as_double();
         double y = body.at(U("y")).as_double();
