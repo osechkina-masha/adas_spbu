@@ -36,10 +36,10 @@ void handle_get(http_request request) {
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
         cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
-//        auto m = cv::imread("frame2.jpg", 0);
 
 //        cv::Rect2d ped = tracker.update(m);
         json::value obj;
+
 //        obj[U("x")] = U(int(ped.x));
 //        obj[U("y")] = U(int(ped.y));
 //        obj[U("height")] = U(int(ped.size().height));
@@ -63,7 +63,6 @@ void handle_post(http_request request) {
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
         cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
-//        auto m = cv::imread("frame1.jpg", 0);
 
         double x = body.at(U("x")).as_double();
         double y = body.at(U("y")).as_double();
@@ -71,7 +70,6 @@ void handle_post(http_request request) {
         double y1 = body.at(U("y1")).as_double();
         cv::Rect_<double> ped = cv::Rect2d({x, y}, cv::Size(int(x1 - x), int(y1 - y)));
         tracker.init(m, ped);
-//        string s = "{ \"length\" : " + to_string(m.rows) + "}";
         string s = "{ }";
 
         json::value answer = json::value::parse(U(s));
