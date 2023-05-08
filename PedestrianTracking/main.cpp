@@ -36,12 +36,20 @@ void handle_get(http_request request) {
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
         cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
-        cv::Rect2d ped = tracker.update(m);
+//        auto m = cv::imread("frame2.jpg", 0);
+
+//        cv::Rect2d ped = tracker.update(m);
         json::value obj;
-        obj[U("x")] = U(ped.x);
-        obj[U("y")] = U(ped.y);
-        obj[U("height")] = U(ped.size().height);
-        obj[U("width")] = U(ped.size().width);
+//        obj[U("x")] = U(int(ped.x));
+//        obj[U("y")] = U(int(ped.y));
+//        obj[U("height")] = U(int(ped.size().height));
+//        obj[U("width")] = U(int(ped.size().width));
+
+
+        obj[U("x")] = U(100);
+        obj[U("y")] = U(100);
+        obj[U("height")] = U(200);
+        obj[U("width")] = U(300);
         request.reply(status_codes::OK, obj);
     });
 }
@@ -55,21 +63,35 @@ void handle_post(http_request request) {
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
         cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
+//        auto m = cv::imread("frame1.jpg", 0);
+
         double x = body.at(U("x")).as_double();
         double y = body.at(U("y")).as_double();
-        int height = body.at(U("height")).as_integer();
-        int width = body.at(U("width")).as_integer();
-        cv::Rect_<double> ped = cv::Rect2d({x, y}, cv::Size(width, height));
+        double x1 = body.at(U("x1")).as_double();
+        double y1 = body.at(U("y1")).as_double();
+        cv::Rect_<double> ped = cv::Rect2d({x, y}, cv::Size(int(x1 - x), int(y1 - y)));
         tracker.init(m, ped);
-        string s = "{ \"length\" : " + to_string(m.rows) + "}";
+//        string s = "{ \"length\" : " + to_string(m.rows) + "}";
+        string s = "{ }";
+
         json::value answer = json::value::parse(U(s));
         request.reply(status_codes::OK, answer);
     });
 }
 
 
+void test_tracker() {
+    cv::Rect_<double> ped = cv::Rect2d({344, 300}, cv::Size(82, 72));
+    auto frame1 = cv::imread("frame1.jpg", 0);
+    auto frame2 = cv::imread("frame2.jpg", 0);
+    tracker.init(frame1, ped);
+    tracker.update(frame2);
+}
+
 int main() {
     std::cout << "Started main" << std::endl;
+
+//    test_tracker();
 
     http_listener listener("http://0.0.0.0:8083");
     listener.support(methods::POST, handle_post);
