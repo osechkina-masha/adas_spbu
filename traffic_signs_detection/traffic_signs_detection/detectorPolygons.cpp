@@ -38,7 +38,6 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 		if (approx.size() == 3)
 		{   
             rectangles.push_back(rectangle);
-			//setLabel(dst, "TRI", contour);    // Triangles
 		}
 		else if (approx.size() >= 4 && approx.size() <= 6)
 		{
@@ -60,10 +59,8 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 			// Use the degrees obtained above and the number of vertices
 			// to determine the shape of the contour
 			if (vtc == 4 && mincos >= -0.1 && maxcos <= 0.3)
-				//setLabel(dst, "RECT", contours[i]);
                 rectangles.push_back(rectangle);
 			else if (vtc == 6 && mincos >= -0.55 && maxcos <= -0.45)
-				//setLabel(dst, "HEXA", contours[i]);
                 rectangles.push_back(rectangle);
 		}
 		else
@@ -74,7 +71,6 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 
 			if (std::abs(1 - ((double)rectangle.width / rectangle.height)) <= 0.2 &&
 			    std::abs(1 - (area / (CV_PI * std::pow(radius, 2)))) <= 0.2)
-				//setLabel(dst, "CIR", contours[i]);
                 rectangles.push_back(rectangle);
 		}
 	}
