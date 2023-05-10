@@ -35,7 +35,7 @@ jobs:
     pytest:
         runs-on: ubuntu-latest
         steps:
-          - uses: action/checkout
+          - uses: actions/checkout@v3
 
           - name: Setup Python 3.10
             uses: actions/setup-python@v3
