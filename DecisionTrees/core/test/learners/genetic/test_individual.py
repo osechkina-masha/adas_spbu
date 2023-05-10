@@ -1,12 +1,12 @@
 from ....lib.learners.genetic.individual import Individual
 from ....lib.description import ParametersDescription
 from copy import deepcopy
-import pytest
+
 
 def create_example_individual() -> Individual:
     parameters = ParametersDescription() \
         .add_discrete("p1", [1, 2, 3, 4]) \
-        .add_continuous("p2", min_v = 0, max_v = 5)
+        .add_continuous("p2", min_v=0, max_v=5)
     individual = Individual(parameters)
     return individual
 

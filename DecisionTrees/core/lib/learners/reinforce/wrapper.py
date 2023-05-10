@@ -81,7 +81,7 @@ class REINFORCELearner(Learner):
                 params.append(action)
         tree = SklearnDecisionTree(states, params, self._env.parameters_description)
         return tree
- 
+
     def load_checkpoint(self, checkpoint_path: str):
         checkpoint = torch.load(checkpoint_path)
         self._model.load_state_dict(checkpoint)

@@ -13,7 +13,7 @@ def sums_to_one(prob_v: Tensor) -> bool:
 
 def test_no_parameters():
     parameters = ParametersDescription()
-    model = REINFORCEModel(1, 10, parameters)
+    model = REINFORCEModel(parameters, 1, 10)
     x = torch.rand((1))
     policy = model(x)
     assert policy.discrete == {}
@@ -22,7 +22,7 @@ def test_no_parameters():
 @pytest.mark.repeat(100)
 def test_one_discrete_parameter():
     parameters = ParametersDescription().add_discrete("p1", [1, 2, 3])
-    model = REINFORCEModel(1, 10, parameters)
+    model = REINFORCEModel(parameters, 1, 10)
     x = torch.rand((1))
 
     policy = model(x)
@@ -42,7 +42,7 @@ def test_multiple_discrete():
     for i in range(n_discrete_parameters):
         parameters = parameters.add_discrete(f"p_{i}", [1, 2, 3])
 
-    model = REINFORCEModel(1, 10, parameters)
+    model = REINFORCEModel(parameters, 1, 10)
     x = torch.rand((1))
 
     policy = model(x)
@@ -60,7 +60,7 @@ def test_one_continuous():
     parameters = ParametersDescription()
     parameters.add_continuous("p1", min_v=-5, max_v=5)
 
-    model = REINFORCEModel(1, 10, parameters)
+    model = REINFORCEModel(parameters, 1, 10)
     x = torch.rand((1))
 
     policy = model(x)

@@ -72,7 +72,7 @@ class ParametersDescription:
                 f"Parameter {p_name} was declared as continuous but passed as discrete"
             decoded[p_name] = self._parameters[p_name].scale(p_value)
         return decoded
-    
+
     def get_description(self, name: str) -> DiscreteParameterDescription | ContinuousParameterDescription:
         return self._parameters[name]
 

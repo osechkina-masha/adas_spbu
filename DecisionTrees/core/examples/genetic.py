@@ -34,10 +34,12 @@ class SimpleEnvironment(Environment):
         return (6 - abs(sum - self.a - self.b)) / 6
 
 
-learner = GeneticLearner(env=SimpleEnvironment())
-learner.fit()
+learner = GeneticLearner(env=SimpleEnvironment(), n_generations=10)
+learner.fit(iterations=3000)
 tree = learner.generate_tree()
 
 predict_with_tree(tree, 0, 0)
 predict_with_tree(tree, 1, 2)
 predict_with_tree(tree, 2, 3)
+
+tree.save("genetic.tree")

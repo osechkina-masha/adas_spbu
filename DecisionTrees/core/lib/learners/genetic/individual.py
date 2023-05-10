@@ -1,4 +1,5 @@
-from ...description import ParametersDescription, NormalizedParameters, DiscreteParameterDescription, ContinuousParameterDescription
+from ...description import (ParametersDescription, NormalizedParameters,
+                            DiscreteParameterDescription, ContinuousParameterDescription)
 import random
 from typing import Optional
 from copy import copy
@@ -36,7 +37,9 @@ class Individual:
         for p_name, other_p_value in other_parameters.discrete.items():
             new_discrete[p_name] = random.choice([self._discrete[p_name], other_p_value])
         for p_name, other_p_value in other_parameters.continuous.items():
-            new_continuous[p_name] = blend_crossover(self._continuous[p_name], other_p_value, lower_b=0.0, upper_b=1.0)[0]
+            new_continuous[p_name] = blend_crossover(
+                self._continuous[p_name], other_p_value, lower_b=0.0, upper_b=1.0
+            )[0]
         return Individual(self._param_desc, NormalizedParameters(new_discrete, new_continuous))
 
     def behave(self) -> NormalizedParameters:

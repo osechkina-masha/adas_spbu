@@ -1,4 +1,5 @@
-from ....lib.learners.reinforce.train import sample_from_policy, discrete_logprob, normal_logprob, discrete_entropy, normal_entropy
+from ....lib.learners.reinforce.train import (sample_from_policy, discrete_logprob,
+                                              normal_logprob, discrete_entropy, normal_entropy)
 from ....lib.learners.reinforce.model import Policy
 import random
 import pytest
@@ -77,7 +78,7 @@ def test_logprob_from_nontrivial_continuous():
 @pytest.mark.repeat(100)
 def test_discrete_entropy_with_comparison():
     uniform_dist = torch.softmax(torch.rand(10), -1)
-    
+
     spiked_uniform = torch.rand((10))
     spiked_uniform[0] = 10
     spiked_uniform = torch.softmax(spiked_uniform, -1)

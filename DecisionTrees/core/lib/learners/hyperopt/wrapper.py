@@ -5,7 +5,7 @@ from ...description import NormalizedParameters, ContinuousParameterDescription,
 
 
 class HyperOptLearner(BlackBoxOptimizerLearner):
-    def __init__(self, env: Environment, max_evals: int=100) -> None:
+    def __init__(self, env: Environment, max_evals: int = 100) -> None:
         super().__init__(env)
         self._max_evals = max_evals
 

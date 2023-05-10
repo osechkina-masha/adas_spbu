@@ -34,10 +34,12 @@ class SimpleEnvironment(Environment):
         return (6 - abs(sum - self.a - self.b)) / 6
 
 
-learner = REINFORCELearner(env=SimpleEnvironment())
+learner = REINFORCELearner(env=SimpleEnvironment(), use_critic=True, n_epochs=10_000)
 learner.fit()
 tree = learner.generate_tree()
 
 predict_with_tree(tree, 0, 0)
 predict_with_tree(tree, 1, 2)
 predict_with_tree(tree, 2, 3)
+predict_with_tree(tree, 2, 1)
+predict_with_tree(tree, 3, 3)

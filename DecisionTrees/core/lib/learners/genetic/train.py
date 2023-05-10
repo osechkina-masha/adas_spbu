@@ -5,15 +5,27 @@ from ...description import NormalizedParameters
 
 import numpy as np
 import random
+from concurrent.futures import ProcessPoolExecutor
 
 
 Population = List[Individual]
 
 
-def select(population: Population, target_size: int, env: Environment, tourn_size: int = 2) -> Tuple[Population, List[float]]:
+def apply_env(env, p):
+    return env.score(p)
+
+
+def select(population: Population,
+           target_size: int,
+           env: Environment,
+           tourn_size: int = 2) -> Tuple[Population, List[float]]:
     population_params = [env.parameters_description.decode_parameters(ind.behave()) for ind in population]
 
-    fitness = [env.score(p) for p in population_params]
+    with ProcessPoolExecutor(max_workers=4) as executor:
+        jobs = [executor.submit(apply_env, env, p) for p in population_params]
+        fitness = [j.result() for j in jobs]
+
+    # fitness = [env.score(p) for p in population_params]
     fitness = np.array(fitness)
 
     new_population = []
@@ -71,12 +83,22 @@ def run_genetic(env: Environment,
                 tourn_size: int = 2,
                 p_crossover: float = 0.9,
                 p_mutation: float = 0.1,
-                elite_size: Optional[int] = None) -> NormalizedParameters:
+                elite_size: Optional[int] = None,
+                verbose: bool = False,
+                reset_before_generation: bool = False) -> NormalizedParameters:
     if elite_size is None:
         elite_size = int(0.2 * pop_size)
     population = [Individual(env.parameters_description) for _ in range(pop_size)]
-    for generation in range(n_generations):
+
+    pbar = range(n_generations)
+
+    for generation in pbar:
+        if reset_before_generation:
+            env.reset()
         population, fitness = select(population, pop_size, env, tourn_size)
+        if verbose:
+            print(f"Gen {generation}. Mean fitness: {np.mean(fitness)}")
+            print(f"Gen {generation}. Best fitness: {np.max(fitness)}")
         elite, others = ellitism(population, fitness, n=elite_size)
         others = crossover(others, p_crossover)
         others = mutation(others, p_mutation)

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict
 
 import torch
 import torch.nn as nn
@@ -21,7 +21,7 @@ class Policy:
 class REINFORCEModel(nn.Module):
     def __init__(self,
                  parameters: ParametersDescription,
-                 inp_dim: int, 
+                 inp_dim: int,
                  hidden_dim: int = 512,
                  n_common_layers: int = 2,
                  with_critic: bool = False,
@@ -83,7 +83,7 @@ class REINFORCEModel(nn.Module):
             continuous_std_policy[p_name] = std_policy
 
         return Policy(discrete_policy,
-                      continuous_mean_policy, 
+                      continuous_mean_policy,
                       continuous_std_policy)
 
     def __call__(self, x: Tensor) -> Policy:

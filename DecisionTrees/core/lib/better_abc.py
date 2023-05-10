@@ -5,7 +5,9 @@ from typing import cast, Any, Callable, TypeVar
 class DummyAttribute:
     pass
 
+
 R = TypeVar('R')
+
 
 def abstract_attribute(obj: Callable[[Any], R] = None) -> R:
     _obj = cast(Any, obj)

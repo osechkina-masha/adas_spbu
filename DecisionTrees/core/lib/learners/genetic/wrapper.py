@@ -8,7 +8,7 @@ from .train import run_genetic
 class GeneticLearner(BlackBoxOptimizerLearner):
     def __init__(self,
                  env: Environment,
-                 n_generations: int = 7, 
+                 n_generations: int = 7,
                  pop_size: int = 20,
                  tourn_size: int = 2,
                  p_crossover: float = 0.9,
