@@ -21,6 +21,7 @@ class KittiEdges(Dataset):
 
         self._pic_size = pic_size
         
+        path = os.path.abspath(path)
         self._pic_folder_path = os.path.join(path, holdout_path, "image_2")
         self._segmentation_folder_path = os.path.join(path, holdout_path, "gt_image_2")
         self._contour_folder_path = os.path.join(path, holdout_path, f"edge_images_pic_size_{pic_size[0]}_{pic_size[1]}")
