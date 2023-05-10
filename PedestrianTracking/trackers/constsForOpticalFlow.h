@@ -1,18 +1,12 @@
 #ifndef ADAS_SPBU_CONSTSFOROPTICALFLOW_H
 #define ADAS_SPBU_CONSTSFOROPTICALFLOW_H
-double qualityLevel = 0.3;
-double minDistance = 7;
-int blockSize = 7;
-bool useHarrisDetector = false;
-double hassisK = 0.04;
 
-int minPointsToTrack = 5;
-
-int termCriteriaMaxCount = 10;
-double termCriteriaEpsilon = 0.03;
-
-int lkWindowWidth = 15;
-int lkWindowHeight = 15;
-int lkMaxDepth =2;
+double pyr_scale = 0.5;
+int levels = 3;
+int winsize = 15;
+int iterations = 3;
+int poly_n = 5;
+double poly_sigma = 1.2;
+int flags = 0;
 
 #endif //ADAS_SPBU_CONSTSFOROPTICALFLOW_H

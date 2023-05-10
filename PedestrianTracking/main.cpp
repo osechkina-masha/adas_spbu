@@ -36,7 +36,7 @@ void handle_get(http_request request) {
 
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
-        cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
+        cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 1);
         cv::cvtColor(m, m, cv::COLOR_BGRA2RGB);
 
         cv::Rect2d ped = tracker.update(m);
@@ -47,11 +47,6 @@ void handle_get(http_request request) {
         obj[U("height")] = U(int(ped.size().height));
         obj[U("width")] = U(int(ped.size().width));
 
-
-//        obj[U("x")] = U(100);
-//        obj[U("y")] = U(100);
-//        obj[U("height")] = U(200);
-//        obj[U("width")] = U(300);
         request.reply(status_codes::OK, obj);
     });
 }
@@ -64,7 +59,7 @@ void handle_post(http_request request) {
 
         auto inputStream = to_utf8string(body.at(("image")).as_string());
         auto imageVector = base64_decode(inputStream);
-        cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 0);
+        cv::Mat m = GetImageFromMemory(imageVector.data(), imageVector.size(), 1);
         cv::cvtColor(m, m, cv::COLOR_BGRA2RGB);
 
         double x = body.at(U("x")).as_double();
@@ -83,8 +78,9 @@ void handle_post(http_request request) {
 
 void test_tracker() {
     cv::Rect_<double> ped = cv::Rect2d({344, 300}, cv::Size(82, 72));
-    auto frame1 = cv::imread("frame1.jpg", 0);
-    auto frame2 = cv::imread("frame2.jpg", 0);
+    auto frame1 = cv::imread("frame1.jpg", 1);
+    std::cout << frame1.channels() << std::endl;
+    auto frame2 = cv::imread("frame2.jpg", 1);
     tracker.init(frame1, ped);
     tracker.update(frame2);
 }
