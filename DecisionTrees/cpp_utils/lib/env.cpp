@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -30,6 +31,7 @@ DiscreteParameter::DiscreteParameter(vector<string> values) {
 string DiscreteParameter::serialize() {
     std::stringstream ss;
     ss << this->get_name() << std::endl;
+    ss << this->values.size() << std::endl;
     for (string v: values) {
         ss << v << std::endl;
     }
@@ -121,6 +123,7 @@ void CppEnvironment::communicate() {
                 for (double el: state) {
                     std::cout << el << std::endl;
                 }
+                std::cout << "end" << std::endl;
                 break;
             }
         }
