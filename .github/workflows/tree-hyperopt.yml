@@ -28,7 +28,7 @@ jobs:
             uses: py-actions/flake8@v2
             with:
                 path: DecisionTrees
-                max-line-length: 120
+                max-line-length: "120"
             env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
