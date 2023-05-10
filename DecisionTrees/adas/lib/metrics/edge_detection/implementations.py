@@ -33,7 +33,7 @@ class Jaccard(BinaryEdgeMetric):
         d = pred + gt
         d[d > 0] = 1
 
-        n = pred * gt 
+        n = pred * gt
 
         jaccard = np.sum(n) / np.sum(d)
 
@@ -44,7 +44,7 @@ class Jaccard(BinaryEdgeMetric):
 
 
 class Dice(BinaryEdgeMetric):
-    def __init__(self, reg_param: float=.0):
+    def __init__(self, reg_param: float = .0):
         self.reg_param = reg_param
 
     def _score(self, pred: np.ndarray, gt: np.ndarray) -> float:
@@ -57,7 +57,7 @@ class Dice(BinaryEdgeMetric):
 
 
 class NormalizedFoM(BinaryEdgeMetric):
-    def __init__(self, k_fp: float=0.1, k_fn: float=0.2):
+    def __init__(self, k_fp: float = 0.1, k_fn: float = 0.2):
         self.k_fp = k_fp
         self.k_fn = k_fn
 

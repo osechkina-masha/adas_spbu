@@ -21,12 +21,15 @@ def scale_img(arr):
     return np.array(new_arr)
 
 
-def get_angle_lines(img,
-                    horizon: float,
-                    step: int,
-                    min_size: int,
-                    angles: List[float],
-                    grad_thr: float):
+def angle_lines(img,
+                horizon: float,
+                step: int,
+                min_size: int,
+                angles: List[float],
+                grad_thr: float):
+    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    img = cv.GaussianBlur(img, (5, 5), 2)
+
     start_height = int(horizon) + 1
     segmented = np.zeros_like(img)
 
@@ -41,7 +44,7 @@ def get_angle_lines(img,
             if not grad_thr_mask[j][i]:
                 continue
             segmented[start_height + step + j][step + i] = get_cluster(grad_angles[j][i], angles)
-    
+
     segmented = scale_img(segmented)
     contours, _ = cv.findContours(segmented, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     final_image = np.zeros_like(img)

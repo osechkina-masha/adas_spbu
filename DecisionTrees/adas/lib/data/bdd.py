@@ -26,7 +26,7 @@ class BDD10kEdges(Dataset):
         self.edge_path = path.join(root, "labels", f"edges_{pic_size[1]}_{pic_size[0]}", holdout)
         if not path.isdir(self.edge_path):
             self._prepare_edges()
-    
+
     def _prepare_edges(self):
         Path(self.edge_path).mkdir(parents=True, exist_ok=True)
         print(f"Couldn't find edges for BDD10k/{self.holdout}")

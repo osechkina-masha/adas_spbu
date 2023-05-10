@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import isdir, isfile, join
+from os.path import isfile, join
 from typing import Optional
 
 import cv2 as cv

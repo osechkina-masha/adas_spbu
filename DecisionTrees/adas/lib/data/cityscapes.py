@@ -32,7 +32,7 @@ class CityScapesEdges(Dataset):
                                 target_type='semantic',
                                 transform=Resize(size=pic_size),
                                 target_transform=Resize(size=pic_size))
-        
+
     def get_img_segmentation(self, i) -> tp.Tuple[np.ndarray, np.ndarray]:
         return self.tv_ds[i]
 
@@ -82,8 +82,8 @@ class CityScapesRain(Dataset):
     @staticmethod
     def generate_img_suffixes(n_rain_patterns=12, abd_comb=None):
         if abd_comb is None:
-            abd_comb = [("0.01", "0.005", "0.01"), 
-                        ("0.02", "0.01", "0.005"), 
+            abd_comb = [("0.01", "0.005", "0.01"),
+                        ("0.02", "0.01", "0.005"),
                         ("0.03", "0.015", "0.002")]
         suffixes = []
         for rp in range(1, n_rain_patterns + 1):
@@ -114,7 +114,6 @@ class CityScapesRain(Dataset):
         img = cv.resize(img, self.pic_size[::-1])
         edges = cv.imread(self._get_contour_path(image_name), cv.IMREAD_GRAYSCALE)
         return img, edges
-        
-        
+
     def __len__(self) -> int:
         return len(self.pic_names) * len(self.pic_suffixes)
