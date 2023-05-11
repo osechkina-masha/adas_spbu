@@ -24,8 +24,8 @@ docker compose -f docker-compose.yml -f components/serverless/docker-compose.ser
 
 ```{r, engine='bash', count_lines}
 wget https://github.com/nuclio/nuclio/releases/download/1.8.14/nuctl-1.8.14-linux-amd64
-sudo chmod +x nuctl-<version>-linux-amd64
-sudo ln -sf $(pwd)/nuctl-<version>-linux-amd64 /usr/local/bin/nuctl
+sudo chmod +x nuctl-1.8.14-linux-amd64
+sudo ln -sf $(pwd)/nuctl-1.8.14-linux-amd64 /usr/local/bin/nuctl
 ```
 
 Создать проект cvat в nuclio
