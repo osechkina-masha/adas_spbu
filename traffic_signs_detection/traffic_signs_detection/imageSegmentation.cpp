@@ -18,6 +18,8 @@ cv::Mat ImageSegmentation::highlightColor(const cv::Mat& originalImage, cv::Scal
     dilate(colorImage, colorImage, element1);
     cv::Mat newImage = cv::Mat::zeros(originalImage.size(), CV_8UC3);
     cv::bitwise_and(originalImage, originalImage, newImage, colorImage);
+    cv::imshow("f3", newImage);
+        cv::waitKey(0);
     return newImage;
 }
 cv::Mat ImageSegmentation::highlightRed(const cv::Mat &originalImage)
@@ -40,5 +42,7 @@ cv::Mat ImageSegmentation::highlightRed(const cv::Mat &originalImage)
     dilate(redImage, redImage, element1);
     cv::Mat final = cv::Mat::zeros(originalImage.size(), CV_8UC3);
     cv::bitwise_and(originalImage, originalImage, final, redImage);
+    cv::imshow("f3", final);
+    cv::waitKey(0);
     return final;
 }

@@ -19,7 +19,6 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 
 	std::vector<std::vector<cv::Point>> contours;
 	cv::findContours(edges, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-    cv::imshow("3", edges);
 	std::vector<cv::Point> approx;
     
     std::vector<cv::Rect> rectangles;
