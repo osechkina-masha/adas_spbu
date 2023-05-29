@@ -8,6 +8,7 @@ ARG CUDA_MAJOR
 ARG CUDA_MINOR
 ENV OPENCV_VERSION 4.x
 ENV DEBIAN_FRONTEND noninteractive
+ENV TZ=Europe/Moscow
 
 # OpenCV Version
 ARG OPENCV_VERSION
@@ -78,12 +79,12 @@ RUN sed -i '86 i INTERFACE_LINK_LIBRARIES "OpenSSL::SSL"' /usr/lib/x86_64-linux-
 
 RUN git clone --branch trafficSignDetection   https://github.com/osechkina-masha/adas_spbu.git &&\
     cd adas_spbu && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
+    cd traffic_signs_detection && \
+    cd traffic_signs_detection && \
+    cmake . && \
     make
 
 
 EXPOSE 8083
 
-CMD ["./adas_spbu/build/traffic_sign_detection/traffic_signs_detection/traffic_signs_detection"]
+CMD ["./adas_spbu/traffic_signs_detection/traffic_signs_detection/traffic_signs_detection"]
