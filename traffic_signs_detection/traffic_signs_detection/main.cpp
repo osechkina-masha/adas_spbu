@@ -1,6 +1,4 @@
-﻿//#include "imageSegmentation.h"
-//#include "detectorPolygons.h"
-#include "trafficSign.h"
+﻿#include "trafficSign.h"
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
@@ -21,17 +19,20 @@ using namespace std;
 
 DetectorTrafficSign detector = DetectorTrafficSign();
 
-cv::Mat GetImageFromMemory(uchar *image, int length, int flag) {
+cv::Mat GetImageFromMemory(uchar *image, int length, int flag)
+{
     cv::Mat1b data(1, length, image);
     return imdecode(data, flag);
 }
 
-void handle_get(http_request request) {
+void handle_get(http_request request)
+{
     std::cout << "get" << std::endl;
 
     TRACE(L"\nhandle GET\n");
 
-    request.extract_json().then([request](web::json::value body) {
+    request.extract_json().then([request](web::json::value body)
+    {
         
         std::cout << "get" << std::endl;
         auto inputStream = to_utf8string(body.at(("image")).as_string());
@@ -70,36 +71,6 @@ void handle_get(http_request request) {
 
 int main(int argc, char* argv[])
 {
-   /*if (argc != 2)
-    {
-       return 1;
-    }
-    cv::VideoCapture video(argv[1]);
-    if (!video.isOpened())
-    {
-        return 1;
-    }
-    while (video.isOpened())
-    {
-        cv::Mat frame;
-        video >> frame;
-      //  cv::Mat frame = cv::imread("2.jpg");
-        cv::Mat red = ImageSegmentation::highlightRed(frame);
-        cv::Mat white = ImageSegmentation::highlightColor(frame, cv::Scalar(0, 0, 150), cv::Scalar(360, 60, 255));
-        cv::Mat blue = ImageSegmentation::highlightColor(frame, cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
-        cv::Mat yellow = ImageSegmentation::highlightColor(frame, cv::Scalar(20, 100, 100), cv::Scalar(30, 255, 255));
-        TrafficSign::showTrafficSigns(red, frame);
-        TrafficSign::showTrafficSigns(white, frame);
-        TrafficSign::showTrafficSigns(blue, frame);
-        TrafficSign::showTrafficSigns(yellow, frame);
-        cv::imshow("red", red);
-        cv::imshow("white", white);
-        cv::imshow("blue", blue);
-        cv::imshow("yellow", yellow);
-        cv::imshow("detected traffic signs", frame);
-        cv::waitKey(0);
-    }
-    */
     std::cout << "Started main" << std::endl;
     http_listener listener("http://0.0.0.0:8083");
     listener.support(methods::GET, handle_get);

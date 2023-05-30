@@ -24,11 +24,9 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
     std::vector<cv::Rect> rectangles;
 	for (auto &contour : contours)
 	{
-		// Approximate contour with accuracy proportional
-		// to the contour perimeter
 		cv::approxPolyDP(cv::Mat(contour), approx, cv::arcLength(cv::Mat(contour), true) * 0.02, true);
 
-		// Skip small or non-convex objects 
+		// Skip small or non-convex objects
 		if (std::fabs(cv::contourArea(contour)) < 100 || !cv::isContourConvex(approx))
 			continue;
 
@@ -40,23 +38,18 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 		}
 		else if (approx.size() >= 4 && approx.size() <= 6)
 		{
-			// Number of vertices of polygonal curve
 			int vtc = approx.size();
 
-			// Get the cosines of all corners
 			std::vector<double> cos;
 			for (int j = 2; j < vtc + 1; j++)
 				cos.push_back(angle(approx[j%vtc], approx[j - 2], approx[j - 1]));
 
-			// Sort ascending the cosine values
 			std::sort(cos.begin(), cos.end());
 
-			// Get the lowest and the highest cosine
 			double mincos = cos.front();
 			double maxcos = cos.back();
 
-			// Use the degrees obtained above and the number of vertices
-			// to determine the shape of the contour
+
 			if (vtc == 4 && mincos >= -0.1 && maxcos <= 0.3)
                 rectangles.push_back(rectangle);
 			else if (vtc == 6 && mincos >= -0.55 && maxcos <= -0.45)
@@ -64,7 +57,6 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 		}
 		else
 		{
-			// Detect and label circles
 			double area = cv::contourArea(contour);
 			int radius = rectangle.width / 2;
 
@@ -75,4 +67,3 @@ std::vector<cv::Rect> DetectorPolygons::detectShape(const cv::Mat &frame)
 	}
     return rectangles;
 }
-
