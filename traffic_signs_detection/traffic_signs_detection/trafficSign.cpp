@@ -14,13 +14,5 @@ std::vector <std::vector<cv::Rect>> DetectorTrafficSign::detectTrafficSigns(cons
     rectangles.push_back(DetectorPolygons::detectShape(white));
     rectangles.push_back(DetectorPolygons::detectShape(blue));
     rectangles.push_back(DetectorPolygons::detectShape(yellow));
-    for (auto &rect : rectangles)
-    {
-        for (auto &r : rect)
-        {
-            cv::rectangle(frame, r, cv::Scalar(5, 6, 7), 3);
-        }
-    }
-    cv::imshow("f3", frame);
     return rectangles;
 }
