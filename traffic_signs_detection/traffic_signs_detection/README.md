@@ -1,5 +1,5 @@
 # Description
-This branch contains a traffic sign detector. This detector is integrated into CVAT.
+This branch contains a traffic sign detector. This detector is integrated into [СVAT](https://github.com/opencv/cvat).
 
 To start you need:
 
