@@ -1,18 +1,34 @@
 # Description
-This branch contains a traffic sign detector
+This branch contains a traffic sign detector. This detector is integrated into CVAT.
+
+To start you need:
+
+Ubuntu 18.04+
+
+Docker and Docker Compose.
 
 # How to run
-- #### Install OpenCV latest version
 - #### Clone the repo
-- #### Run the project
-If you are on Linux/Mac OS build and run the project with these commands:
-```shell
-cmake .
-make
-./traffic_sign_detecton your_video_file.mp4
+```shell 
+https://github.com/rongirl/cvat_with_traffic_sign_detector.git
 ```
-If you are on Windows build and run the project with these commands:
+- ####  Install nuclio 
 ```shell
-cmake .
-path_to_traffic_sign_detecton.exe your_video_file.mp4
+wget https://github.com/nuclio/nuclio/releases/download/1.8.14/nuctl-1.8.14-linux-amd64
+sudo chmod +x nuctl-1.8.14-linux-amd64
+sudo ln -sf $(pwd)/nuctl-1.8.14-linux-amd64 /usr/local/bin/nuctl
 ```
+- #### Build CVAT 
+```shell 
+docker compose -f docker-compose.yml -f components/serverless/docker-compose.serverless.yml up -d
+```
+- #### Create project in nuclio
+```shell 
+nuctl create project cvat
+```
+- #### Run CVAT with my detector
+```shell 
+sudo chmod +x detector.sh
+./detector.sh
+```
+Open the Google Chrome browser and go to localhost:8080. My traffic sign detector is in AI tools.
