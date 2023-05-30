@@ -5,10 +5,9 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-class TrafficSign
+class DetectorTrafficSign
 {
-
 public:
 
-    static void showTrafficSigns(const cv::Mat &colorImage, const cv::Mat &frame);
+    static std::vector <std::vector<cv::Rect>> detectTrafficSigns(const cv::Mat &frame);
 };
